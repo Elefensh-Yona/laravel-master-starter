@@ -75,7 +75,7 @@ class SettingStore
     }
 
     /**
-     * @return array{appDisplayName: string, appTagline: string|null, supportEmail: string|null, organizationName: string|null, organizationLegalName: string|null, organizationEmail: string|null, organizationPhone: string|null, publicSiteTitle: string|null, publicTagline: string|null, publicCtaLabel: string|null, publicCtaUrl: string|null, publicFooterText: string|null}
+     * @return array{appDisplayName: string, appTagline: string|null, supportEmail: string|null, organizationName: string|null, organizationLegalName: string|null, organizationEmail: string|null, organizationPhone: string|null}
      */
     public static function shared(): array
     {
@@ -89,11 +89,6 @@ class SettingStore
             'organizationLegalName' => $values['organization_legal_name'],
             'organizationEmail' => $values['organization_email'],
             'organizationPhone' => $values['organization_phone'],
-            'publicSiteTitle' => $values['public_site_title'],
-            'publicTagline' => $values['public_tagline'],
-            'publicCtaLabel' => $values['public_cta_label'],
-            'publicCtaUrl' => $values['public_cta_url'],
-            'publicFooterText' => $values['public_footer_text'],
         ];
     }
 }

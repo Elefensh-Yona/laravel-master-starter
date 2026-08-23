@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "distro-app API",
+    "name": "Laravel Master Starter API",
     "_postman_id": "8a4e33ec-0f56-4b69-a2dd-4f9fd4f7c5fb",
     "description": "Baseline API collection for auth, notifications, activity logs, and admin summary endpoints.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -8,7 +8,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "https://distro-app.test"
+      "value": "http://localhost"
     },
     {
       "key": "token",

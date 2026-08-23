@@ -12,8 +12,18 @@ import PageHeader from '@/components/PageHeader.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create as createUser, destroy as destroyUser, edit as editUser, index as usersIndex } from '@/routes/users';
-import type { BreadcrumbItem, ManagedUser, PaginatedResource, ResourceFilters } from '@/types';
+import {
+    create as createUser,
+    destroy as destroyUser,
+    edit as editUser,
+    index as usersIndex,
+} from '@/routes/users';
+import type {
+    BreadcrumbItem,
+    ManagedUser,
+    PaginatedResource,
+    ResourceFilters,
+} from '@/types';
 
 type Props = {
     users: PaginatedResource<ManagedUser>;
@@ -69,7 +79,9 @@ const deleteSelectedUser = (user: ManagedUser): void => {
                 description="Manage core user records and send people into the right parts of the application by assigning roles intentionally."
             >
                 <template #eyebrow>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-emerald-900 uppercase dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-100">
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-emerald-900 uppercase dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-100"
+                    >
                         <Users class="size-3.5" />
                         Admin users
                     </div>
@@ -98,12 +110,16 @@ const deleteSelectedUser = (user: ManagedUser): void => {
                 :empty-icon="ShieldCheck"
             >
                 <template #head>
-                    <tr class="text-left text-xs tracking-wide text-muted-foreground uppercase">
+                    <tr
+                        class="text-left text-xs tracking-wide text-muted-foreground uppercase"
+                    >
                         <th class="px-4 py-3 font-medium">User</th>
                         <th class="px-4 py-3 font-medium">Roles</th>
                         <th class="px-4 py-3 font-medium">Verification</th>
                         <th class="px-4 py-3 font-medium">Created</th>
-                        <th class="px-4 py-3 font-medium text-right">Actions</th>
+                        <th class="px-4 py-3 text-right font-medium">
+                            Actions
+                        </th>
                     </tr>
                 </template>
 
@@ -150,12 +166,28 @@ const deleteSelectedUser = (user: ManagedUser): void => {
                             </div>
                         </td>
                         <td class="px-4 py-4">
-                            <Badge :variant="user.emailVerifiedAt ? 'secondary' : 'outline'">
-                                {{ user.emailVerifiedAt ? 'Verified' : 'Unverified' }}
+                            <Badge
+                                :variant="
+                                    user.emailVerifiedAt
+                                        ? 'secondary'
+                                        : 'outline'
+                                "
+                            >
+                                {{
+                                    user.emailVerifiedAt
+                                        ? 'Verified'
+                                        : 'Unverified'
+                                }}
                             </Badge>
                         </td>
                         <td class="px-4 py-4 text-sm text-muted-foreground">
-                            {{ user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A' }}
+                            {{
+                                user.createdAt
+                                    ? new Date(
+                                          user.createdAt,
+                                      ).toLocaleDateString()
+                                    : 'N/A'
+                            }}
                         </td>
                         <td class="px-4 py-4">
                             <div class="flex items-center justify-end gap-2">

@@ -11,7 +11,10 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index as activityLogsIndex, show as activityLogsShow } from '@/routes/activity-logs';
+import {
+    index as activityLogsIndex,
+    show as activityLogsShow,
+} from '@/routes/activity-logs';
 import type {
     ActivityLogFilters,
     BreadcrumbItem,
@@ -71,7 +74,9 @@ const resetFilters = (): void => {
                 description="Track key admin actions and notification acknowledgement events from one audit-friendly screen."
             >
                 <template #eyebrow>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-amber-900 uppercase dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100">
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-amber-900 uppercase dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-100"
+                    >
                         <ScrollText class="size-3.5" />
                         Audit trail
                     </div>
@@ -85,8 +90,13 @@ const resetFilters = (): void => {
                 @reset="resetFilters"
             >
                 <template #actions>
-                    <div class="flex items-center gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2">
-                        <Label for="event-filter" class="text-xs text-muted-foreground">
+                    <div
+                        class="flex items-center gap-2 rounded-xl border border-border/70 bg-background/80 px-3 py-2"
+                    >
+                        <Label
+                            for="event-filter"
+                            class="text-xs text-muted-foreground"
+                        >
                             Event
                         </Label>
                         <select
@@ -115,13 +125,17 @@ const resetFilters = (): void => {
                 :empty-icon="Search"
             >
                 <template #head>
-                    <tr class="text-left text-xs tracking-wide text-muted-foreground uppercase">
+                    <tr
+                        class="text-left text-xs tracking-wide text-muted-foreground uppercase"
+                    >
                         <th class="px-4 py-3 font-medium">Event</th>
                         <th class="px-4 py-3 font-medium">Description</th>
                         <th class="px-4 py-3 font-medium">Actor</th>
                         <th class="px-4 py-3 font-medium">IP</th>
                         <th class="px-4 py-3 font-medium">Created</th>
-                        <th class="px-4 py-3 font-medium text-right">Actions</th>
+                        <th class="px-4 py-3 text-right font-medium">
+                            Actions
+                        </th>
                     </tr>
                 </template>
 
@@ -134,7 +148,9 @@ const resetFilters = (): void => {
                         <td class="px-4 py-4">
                             <Badge variant="outline">{{ log.event }}</Badge>
                         </td>
-                        <td class="px-4 py-4 text-sm leading-6 text-muted-foreground">
+                        <td
+                            class="px-4 py-4 text-sm leading-6 text-muted-foreground"
+                        >
                             <div>{{ log.description }}</div>
                             <div
                                 v-if="Object.keys(log.properties).length > 0"
@@ -150,7 +166,11 @@ const resetFilters = (): void => {
                             {{ log.ipAddress || 'N/A' }}
                         </td>
                         <td class="px-4 py-4 text-sm text-muted-foreground">
-                            {{ log.createdAt ? new Date(log.createdAt).toLocaleString() : 'N/A' }}
+                            {{
+                                log.createdAt
+                                    ? new Date(log.createdAt).toLocaleString()
+                                    : 'N/A'
+                            }}
                         </td>
                         <td class="px-4 py-4">
                             <div class="flex justify-end">

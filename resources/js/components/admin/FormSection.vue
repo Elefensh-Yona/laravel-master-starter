@@ -13,7 +13,9 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <section class="rounded-[1.5rem] border border-border/70 bg-card/85 shadow-sm backdrop-blur">
+    <section
+        class="rounded-[1.5rem] border border-border/70 bg-card/85 shadow-sm backdrop-blur"
+    >
         <div
             v-if="title || description || $slots.headerAction"
             class="flex flex-col gap-3 border-b border-border/60 px-5 py-5 md:flex-row md:items-start md:justify-between"
@@ -30,7 +32,10 @@ withDefaults(defineProps<Props>(), {
                 </p>
             </div>
 
-            <div v-if="$slots.headerAction" class="flex shrink-0 items-center gap-2">
+            <div
+                v-if="$slots.headerAction"
+                class="flex shrink-0 items-center gap-2"
+            >
                 <slot name="headerAction" />
             </div>
         </div>

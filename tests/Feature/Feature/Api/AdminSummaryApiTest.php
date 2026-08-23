@@ -11,10 +11,10 @@ test('admin summary api returns core admin counts and breakdowns', function () {
     $admin = User::factory()->create([
         'email_verified_at' => now(),
     ]);
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     ActivityLog::factory()->count(2)->create([
         'actor_id' => $admin->id,
@@ -36,7 +36,7 @@ test('member cannot access the admin summary api endpoint', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     $token = $member->createToken('android')->plainTextToken;
 

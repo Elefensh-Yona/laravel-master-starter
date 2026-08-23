@@ -2,6 +2,8 @@
 import { Link, router, usePage } from '@inertiajs/vue3';
 import { Bell, CheckCheck } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,9 +13,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { index as notificationsIndex, read as notificationsRead, readAll as notificationsReadAll } from '@/routes/notifications';
+import {
+    index as notificationsIndex,
+    read as notificationsRead,
+    readAll as notificationsReadAll,
+} from '@/routes/notifications';
 import type { Auth, ManagedNotification } from '@/types';
 
 const page = usePage();
@@ -21,17 +25,25 @@ const auth = computed(() => page.props.auth as Auth);
 const preview = computed(() => auth.value.notificationPreview ?? []);
 
 const markRead = (notification: ManagedNotification): void => {
-    router.post(notificationsRead(notification.id).url, {}, {
-        preserveScroll: true,
-        preserveState: true,
-    });
+    router.post(
+        notificationsRead(notification.id).url,
+        {},
+        {
+            preserveScroll: true,
+            preserveState: true,
+        },
+    );
 };
 
 const markAllRead = (): void => {
-    router.post(notificationsReadAll().url, {}, {
-        preserveScroll: true,
-        preserveState: true,
-    });
+    router.post(
+        notificationsReadAll().url,
+        {},
+        {
+            preserveScroll: true,
+            preserveState: true,
+        },
+    );
 };
 </script>
 
@@ -41,14 +53,24 @@ const markAllRead = (): void => {
             <Button variant="ghost" size="sm" class="rounded-full">
                 <Bell class="size-4" />
                 <span>Notifications</span>
-                <Badge v-if="auth.notificationCount > 0" variant="secondary" class="ml-1">
+                <Badge
+                    v-if="auth.notificationCount > 0"
+                    variant="secondary"
+                    class="ml-1"
+                >
                     {{ auth.notificationCount }}
                 </Badge>
             </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" :side-offset="8" class="w-96 rounded-2xl p-0">
-            <DropdownMenuLabel class="flex items-center justify-between px-4 py-3">
+        <DropdownMenuContent
+            align="end"
+            :side-offset="8"
+            class="w-96 rounded-2xl p-0"
+        >
+            <DropdownMenuLabel
+                class="flex items-center justify-between px-4 py-3"
+            >
                 <div>
                     <div class="text-sm font-semibold">Notifications</div>
                     <div class="text-xs text-muted-foreground">
@@ -78,18 +100,34 @@ const markAllRead = (): void => {
                     <div class="flex w-full items-start gap-3">
                         <div
                             class="mt-1 size-2 rounded-full"
-                            :class="notification.readAt ? 'bg-muted-foreground/40' : 'bg-sky-500'"
+                            :class="
+                                notification.readAt
+                                    ? 'bg-muted-foreground/40'
+                                    : 'bg-sky-500'
+                            "
                         />
                         <div class="min-w-0 flex-1 space-y-1">
-                            <div class="flex items-center justify-between gap-3">
+                            <div
+                                class="flex items-center justify-between gap-3"
+                            >
                                 <div class="truncate text-sm font-medium">
                                     {{ notification.title }}
                                 </div>
-                                <div class="shrink-0 text-[11px] text-muted-foreground">
-                                    {{ notification.createdAt ? new Date(notification.createdAt).toLocaleDateString() : 'Now' }}
+                                <div
+                                    class="shrink-0 text-[11px] text-muted-foreground"
+                                >
+                                    {{
+                                        notification.createdAt
+                                            ? new Date(
+                                                  notification.createdAt,
+                                              ).toLocaleDateString()
+                                            : 'Now'
+                                    }}
                                 </div>
                             </div>
-                            <div class="line-clamp-2 text-xs leading-5 text-muted-foreground">
+                            <div
+                                class="line-clamp-2 text-xs leading-5 text-muted-foreground"
+                            >
                                 {{ notification.message }}
                             </div>
                             <div class="flex items-center gap-2 pt-1">
@@ -129,7 +167,11 @@ const markAllRead = (): void => {
             <DropdownMenuSeparator />
 
             <div class="p-2">
-                <Button as-child variant="outline" class="w-full justify-center">
+                <Button
+                    as-child
+                    variant="outline"
+                    class="w-full justify-center"
+                >
                     <Link :href="notificationsIndex()">
                         View all notifications
                     </Link>

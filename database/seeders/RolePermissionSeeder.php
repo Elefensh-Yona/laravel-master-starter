@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Support\SystemRole;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -12,29 +13,20 @@ class RolePermissionSeeder extends Seeder
     /**
      * Default boilerplate roles that should always exist.
      *
-     * @var array<string, array{description: string, permissions: array<int, string>}>
+     * @var array<string, array{description: string, permissions: array<int, string>>}
      */
     private const DEFAULT_ROLES = [
-        'Admin' => [
+        SystemRole::SUPER_ADMIN => [
             'description' => 'Full-access recovery role for managing the entire boilerplate.',
             'permissions' => [
                 'dashboard.view',
                 'search.view',
-                'handbook.view',
                 'exports.view',
                 'settings.view',
                 'settings.update',
                 'media.view',
                 'media.create',
                 'media.delete',
-                'notes.view',
-                'notes.create',
-                'notes.delete',
-                'reports.view',
-                'pages.view',
-                'pages.create',
-                'pages.update',
-                'pages.delete',
                 'users.view',
                 'users.create',
                 'users.update',
@@ -47,51 +39,31 @@ class RolePermissionSeeder extends Seeder
                 'activity-logs.view',
             ],
         ],
-        'Manager' => [
-            'description' => 'Operational role with visibility into shared activity and inbox-style features.',
+        SystemRole::MANAGER => [
+            'description' => 'Operational role with visibility into shared workspace activity and user administration.',
             'permissions' => [
                 'dashboard.view',
                 'search.view',
-                'handbook.view',
                 'exports.view',
                 'settings.view',
                 'media.view',
                 'media.create',
-                'notes.view',
-                'notes.create',
-                'notes.delete',
-                'reports.view',
-                'pages.view',
-                'pages.create',
-                'pages.update',
+                'users.view',
                 'notifications.view',
                 'activity-logs.view',
             ],
         ],
-        'Member' => [
+        SystemRole::STAFF => [
             'description' => 'Standard internal user with dashboard and notification access.',
             'permissions' => [
                 'dashboard.view',
                 'search.view',
-                'handbook.view',
                 'notifications.view',
             ],
         ],
-        'ReadOnly' => [
-            'description' => 'Signed-in user with read-only access to the shared workspace.',
-            'permissions' => [
-                'dashboard.view',
-                'search.view',
-                'handbook.view',
-            ],
-        ],
-        'External' => [
-            'description' => 'Restricted external account with only the base workspace available.',
-            'permissions' => [
-                'dashboard.view',
-                'search.view',
-                'handbook.view',
-            ],
+        SystemRole::GUEST => [
+            'description' => 'Authenticated account with no dashboard or administrative access by default.',
+            'permissions' => [],
         ],
     ];
 
@@ -105,21 +77,12 @@ class RolePermissionSeeder extends Seeder
         $permissions = [
             'dashboard.view',
             'search.view',
-            'handbook.view',
             'exports.view',
             'settings.view',
             'settings.update',
             'media.view',
             'media.create',
             'media.delete',
-            'notes.view',
-            'notes.create',
-            'notes.delete',
-            'reports.view',
-            'pages.view',
-            'pages.create',
-            'pages.update',
-            'pages.delete',
             'users.view',
             'users.create',
             'users.update',

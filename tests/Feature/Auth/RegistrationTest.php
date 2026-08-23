@@ -22,7 +22,7 @@ test('new users can register', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect('/');
 });
 
 test('newly registered users start unverified when email verification is enabled', function () {
@@ -33,7 +33,7 @@ test('newly registered users start unverified when email verification is enabled
         'password_confirmation' => 'password',
     ]);
 
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect('/');
 
     $user = User::query()->where('email', 'verification@example.com')->firstOrFail();
 

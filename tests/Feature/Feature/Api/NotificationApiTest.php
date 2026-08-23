@@ -9,7 +9,7 @@ test('notification api lists and reads notifications', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('Member');
+    $user->assignRole('Staff');
     $user->notify(new SystemMessageNotification(
         title: 'API notice',
         message: 'Open the mobile client.',
@@ -41,7 +41,7 @@ test('notification api can mark all entries as read', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('Member');
+    $user->assignRole('Staff');
 
     $user->notify(new SystemMessageNotification(title: 'One', message: 'First'));
     $user->notify(new SystemMessageNotification(title: 'Two', message: 'Second'));
@@ -60,7 +60,7 @@ test('notification api enforces notification permissions', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('ReadOnly');
+    $user->assignRole('Guest');
 
     $token = $user->createToken('postman')->plainTextToken;
 

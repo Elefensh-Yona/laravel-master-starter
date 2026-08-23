@@ -9,7 +9,7 @@ type Props = {
     canCreate?: boolean;
 };
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
     createLabel: 'Create',
     canCreate: false,
 });
@@ -25,17 +25,20 @@ defineEmits<{
 </script>
 
 <template>
-    <div class="flex flex-col gap-3 rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between">
-        <form class="flex flex-1 flex-col gap-3 sm:flex-row" @submit.prevent="$emit('submit')">
+    <div
+        class="flex flex-col gap-3 rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur lg:flex-row lg:items-center lg:justify-between"
+    >
+        <form
+            class="flex flex-1 flex-col gap-3 sm:flex-row"
+            @submit.prevent="$emit('submit')"
+        >
             <Input
                 v-model="model"
                 :placeholder="searchPlaceholder"
                 class="w-full sm:max-w-md"
             />
             <div class="flex items-center gap-2">
-                <Button type="submit" variant="secondary">
-                    Search
-                </Button>
+                <Button type="submit" variant="secondary"> Search </Button>
                 <Button
                     v-if="hasSearch"
                     type="button"

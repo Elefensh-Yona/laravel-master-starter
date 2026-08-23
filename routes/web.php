@@ -2,27 +2,26 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Admin\MediaManagementController;
-use App\Http\Controllers\Admin\NoteManagementController;
-use App\Http\Controllers\Admin\PageImportController;
-use App\Http\Controllers\Admin\PageManagementController;
 use App\Http\Controllers\Admin\RoleManagementController;
 use App\Http\Controllers\Admin\SettingsManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportCenterController;
 use App\Http\Controllers\GlobalSearchController;
-use App\Http\Controllers\HandbookController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\PublicPageController;
-use App\Http\Controllers\ReportsController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
 
-Route::inertia('/', 'Welcome', [
-    'canRegister' => Features::enabled(Features::registration()),
-])->name('home');
+Route::get('/', function () {
+    $user = auth()->user();
 
-Route::get('handbook', HandbookController::class)->name('handbook.index');
+    if ($user === null) {
+        return redirect()->route('login');
+    }
+
+    return $user->can('dashboard.view')
+        ? redirect()->route('dashboard')
+        : redirect()->route('profile.edit');
+})->name('home');
 
 Route::middleware(['auth', 'verified', 'permission:dashboard.view'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
@@ -37,14 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('permission:exports.view')
         ->name('exports.index');
 
-    Route::get('reports', [ReportsController::class, 'index'])
-        ->middleware('permission:reports.view')
-        ->name('reports.index');
-
-    Route::get('reports/pages.csv', [ReportsController::class, 'pagesCsv'])
-        ->middleware('permission:reports.view')
-        ->name('reports.pages.csv');
-
     Route::get('exports/users.csv', [ExportCenterController::class, 'usersCsv'])
         ->middleware(['permission:exports.view', 'permission:users.view'])
         ->name('exports.users.csv');
@@ -56,22 +47,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('admin/users', [UserManagementController::class, 'index'])
         ->middleware('permission:users.view')
         ->name('users.index');
-
-    Route::get('admin/pages', [PageManagementController::class, 'index'])
-        ->middleware('permission:pages.view')
-        ->name('pages.index');
-
-    Route::get('admin/pages/import', [PageImportController::class, 'index'])
-        ->middleware('permission:pages.create')
-        ->name('pages.import');
-
-    Route::post('admin/pages/import/preview', [PageImportController::class, 'preview'])
-        ->middleware('permission:pages.create')
-        ->name('pages.import.preview');
-
-    Route::post('admin/pages/import', [PageImportController::class, 'store'])
-        ->middleware('permission:pages.create')
-        ->name('pages.import.store');
 
     Route::get('admin/settings', [SettingsManagementController::class, 'edit'])
         ->middleware('permission:settings.view')
@@ -96,38 +71,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('admin/media/{media}', [MediaManagementController::class, 'destroy'])
         ->middleware('permission:media.delete')
         ->name('media.destroy');
-
-    Route::post('admin/notes', [NoteManagementController::class, 'store'])
-        ->middleware('permission:notes.create')
-        ->name('notes.store');
-
-    Route::delete('admin/notes/{note}', [NoteManagementController::class, 'destroy'])
-        ->middleware('permission:notes.delete')
-        ->name('notes.destroy');
-
-    Route::get('admin/pages/create', [PageManagementController::class, 'create'])
-        ->middleware('permission:pages.create')
-        ->name('pages.create');
-
-    Route::post('admin/pages', [PageManagementController::class, 'store'])
-        ->middleware('permission:pages.create')
-        ->name('pages.store');
-
-    Route::get('admin/pages/{page}/edit', [PageManagementController::class, 'edit'])
-        ->middleware('permission:pages.update')
-        ->name('pages.edit');
-
-    Route::put('admin/pages/{page}', [PageManagementController::class, 'update'])
-        ->middleware('permission:pages.update')
-        ->name('pages.update');
-
-    Route::delete('admin/pages/{page}', [PageManagementController::class, 'destroy'])
-        ->middleware('permission:pages.delete')
-        ->name('pages.destroy');
-
-    Route::post('admin/pages/{page}/restore', [PageManagementController::class, 'restore'])
-        ->middleware('permission:pages.delete')
-        ->name('pages.restore');
 
     Route::get('admin/users/create', [UserManagementController::class, 'create'])
         ->middleware('permission:users.create')
@@ -203,5 +146,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
-
-Route::get('{page:slug}', PublicPageController::class)->name('public-pages.show');

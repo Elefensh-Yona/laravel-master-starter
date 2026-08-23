@@ -44,17 +44,22 @@ const openGroups = ref<Record<string, boolean>>({});
 watch(
     mainNavigation,
     (groups) => {
-        openGroups.value = groups.reduce<Record<string, boolean>>((nextState, group) => {
-            nextState[group.title] = openGroups.value[group.title] ?? true;
+        openGroups.value = groups.reduce<Record<string, boolean>>(
+            (nextState, group) => {
+                nextState[group.title] = openGroups.value[group.title] ?? true;
 
-            return nextState;
-        }, {});
+                return nextState;
+            },
+            {},
+        );
     },
     { immediate: true },
 );
 
 const allGroupsExpanded = computed(() =>
-    mainNavigation.value.every((group) => openGroups.value[group.title] ?? true),
+    mainNavigation.value.every(
+        (group) => openGroups.value[group.title] ?? true,
+    ),
 );
 
 const isSidebarIconCollapsed = computed(() => state.value === 'collapsed');
@@ -92,9 +97,19 @@ const toggleAllGroups = (): void => {
                 </SidebarMenuItem>
             </SidebarMenu>
             <div class="mt-3 px-2 group-data-[collapsible=icon]:hidden">
-                <div class="rounded-xl border border-sidebar-border/70 bg-background/70 px-3 py-2">
-                    <div class="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Access</div>
-                    <div class="mt-1 truncate text-sm font-medium text-foreground">{{ roleSummary }}</div>
+                <div
+                    class="rounded-xl border border-sidebar-border/70 bg-background/70 px-3 py-2"
+                >
+                    <div
+                        class="text-[11px] tracking-[0.18em] text-muted-foreground uppercase"
+                    >
+                        Access
+                    </div>
+                    <div
+                        class="mt-1 truncate text-sm font-medium text-foreground"
+                    >
+                        {{ roleSummary }}
+                    </div>
                 </div>
             </div>
         </SidebarHeader>
@@ -111,14 +126,32 @@ const toggleAllGroups = (): void => {
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton
-                        :tooltip="allGroupsExpanded ? 'Collapse all groups' : 'Expand all groups'"
-                        :aria-label="allGroupsExpanded ? 'Collapse all groups' : 'Expand all groups'"
+                        :tooltip="
+                            allGroupsExpanded
+                                ? 'Collapse all groups'
+                                : 'Expand all groups'
+                        "
+                        :aria-label="
+                            allGroupsExpanded
+                                ? 'Collapse all groups'
+                                : 'Expand all groups'
+                        "
                         class="justify-center"
                         @click="toggleAllGroups"
                     >
-                        <component :is="allGroupsExpanded ? ChevronsDownUp : ChevronsUpDown" />
+                        <component
+                            :is="
+                                allGroupsExpanded
+                                    ? ChevronsDownUp
+                                    : ChevronsUpDown
+                            "
+                        />
                         <span v-if="!isSidebarIconCollapsed" class="sr-only">
-                            {{ allGroupsExpanded ? 'Collapse all groups' : 'Expand all groups' }}
+                            {{
+                                allGroupsExpanded
+                                    ? 'Collapse all groups'
+                                    : 'Expand all groups'
+                            }}
                         </span>
                     </SidebarMenuButton>
                 </SidebarMenuItem>

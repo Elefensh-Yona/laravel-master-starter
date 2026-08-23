@@ -9,7 +9,7 @@ test('notification center lists notifications and shares unread count', function
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('Member');
+    $user->assignRole('Staff');
     $user->notify(new SystemMessageNotification(
         title: 'New access update',
         message: 'Your role permissions were updated.',
@@ -33,7 +33,7 @@ test('notifications can be marked read individually and all at once', function (
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('Member');
+    $user->assignRole('Staff');
     $user->notify(new SystemMessageNotification(
         title: 'First',
         message: 'First message',
@@ -62,7 +62,7 @@ test('users without notification permission cannot access the notification cente
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('ReadOnly');
+    $user->assignRole('Guest');
 
     $this->actingAs($user)
         ->get(route('notifications.index'))
@@ -73,7 +73,7 @@ test('notification preview remains available even with no notifications', functi
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('Member');
+    $user->assignRole('Staff');
 
     $this->actingAs($user)
         ->get(route('dashboard'))

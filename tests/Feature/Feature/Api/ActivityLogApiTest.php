@@ -8,7 +8,7 @@ test('activity log api lists and shows audit entries', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $log = ActivityLog::factory()->create([
         'actor_id' => $admin->id,
@@ -36,7 +36,7 @@ test('activity log api enforces audit permissions', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     $token = $member->createToken('phone')->plainTextToken;
 

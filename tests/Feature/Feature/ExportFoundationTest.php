@@ -16,7 +16,7 @@ test('manager can access the export center and print summary', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('exports/Index')
-            ->has('resources', 1),
+            ->has('resources', 2),
         );
 
     $this->actingAs($manager)
@@ -34,13 +34,13 @@ test('admin can download users csv export', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $exportedUser = User::factory()->create([
         'name' => 'CSV User',
         'email' => 'csv-user@example.com',
     ]);
-    $exportedUser->assignRole('Member');
+    $exportedUser->assignRole('Staff');
 
     $response = $this->actingAs($admin)->get(route('exports.users.csv'));
 
@@ -57,7 +57,7 @@ test('member cannot access export routes', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     $this->actingAs($member)
         ->get(route('exports.index'))

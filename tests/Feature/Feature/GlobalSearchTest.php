@@ -11,12 +11,12 @@ test('admin global search returns grouped results across accessible modules', fu
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     User::factory()->create([
         'name' => 'Searchable Person',
         'email' => 'searchable@example.com',
-    ])->assignRole('Member');
+    ])->assignRole('Staff');
 
     Role::query()->create([
         'name' => 'SearchableRole',
@@ -53,12 +53,12 @@ test('member global search only returns modules allowed to that role', function 
     $this->seed(RolePermissionSeeder::class);
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     User::factory()->create([
         'name' => 'Visible User',
         'email' => 'visible-user@example.com',
-    ])->assignRole('Member');
+    ])->assignRole('Staff');
 
     $member->notify(new SystemMessageNotification(
         title: 'Visible notice',

@@ -38,7 +38,13 @@ const toggleAppearance = (): void => {
             </template>
         </div>
         <div class="ml-auto flex items-center gap-2">
-            <Button v-if="auth.can.viewSearch" variant="ghost" size="sm" class="rounded-full" as-child>
+            <Button
+                v-if="auth.can.viewSearch"
+                variant="ghost"
+                size="sm"
+                class="rounded-full"
+                as-child
+            >
                 <Link :href="searchIndex()">
                     <Search class="size-4" />
                     Search

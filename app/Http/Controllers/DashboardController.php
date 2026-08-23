@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
-use App\Models\ImportRun;
 use App\Models\Media;
-use App\Models\Page;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Role;
 
 class DashboardController extends Controller
 {
@@ -17,32 +16,32 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard', [
             'metrics' => [
                 [
-                    'key' => 'pages',
-                    'label' => 'Pages',
-                    'value' => Page::withTrashed()->count(),
-                    'description' => 'Public content records including archived or deleted items.',
+                    'key' => 'users',
+                    'label' => 'Active users',
+                    'value' => User::query()->count(),
+                    'description' => 'Signed-in operators and role-managed users in the workspace.',
+                    'tone' => 'violet',
+                ],
+                [
+                    'key' => 'roles',
+                    'label' => 'Roles',
+                    'value' => Role::query()->count(),
+                    'description' => 'Access bundles that group permissions for workspace members.',
                     'tone' => 'amber',
                 ],
                 [
                     'key' => 'media',
                     'label' => 'Media files',
                     'value' => Media::query()->count(),
-                    'description' => 'Shared business media ready for later attachment reuse.',
+                    'description' => 'Shared files stored in the reusable media library.',
                     'tone' => 'sky',
                 ],
                 [
-                    'key' => 'imports',
-                    'label' => 'Import runs',
-                    'value' => ImportRun::query()->count(),
-                    'description' => 'Previewed and completed bulk-intake operations.',
+                    'key' => 'activity',
+                    'label' => 'Activity events',
+                    'value' => ActivityLog::query()->count(),
+                    'description' => 'Audited actions recorded across the workspace.',
                     'tone' => 'emerald',
-                ],
-                [
-                    'key' => 'activeUsers',
-                    'label' => 'Active users',
-                    'value' => User::query()->count(),
-                    'description' => 'Signed-in operators and role-managed users in the workspace.',
-                    'tone' => 'violet',
                 ],
             ],
             'recentActivity' => ActivityLog::query()
@@ -57,12 +56,6 @@ class DashboardController extends Controller
                 ])
                 ->values()
                 ->all(),
-            'reportHighlights' => [
-                'publishedPages' => Page::query()->where('status', 'published')->count(),
-                'reviewPages' => Page::query()->where('status', 'review')->count(),
-                'deletedPages' => Page::onlyTrashed()->count(),
-                'completedImports' => ImportRun::query()->where('status', 'completed')->count(),
-            ],
         ]);
     }
 }

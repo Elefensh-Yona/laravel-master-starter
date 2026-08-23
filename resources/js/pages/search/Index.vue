@@ -40,15 +40,19 @@ const submit = (): void => {
 
     isSearching.value = true;
 
-    router.get(searchIndex.url({ query: { q: query.value || undefined } }), {}, {
-        preserveState: true,
-        preserveScroll: true,
-        replace: true,
-        only: ['filters', 'results'],
-        onFinish: () => {
-            isSearching.value = false;
+    router.get(
+        searchIndex.url({ query: { q: query.value || undefined } }),
+        {},
+        {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            only: ['filters', 'results'],
+            onFinish: () => {
+                isSearching.value = false;
+            },
         },
-    });
+    );
 };
 
 watch(
@@ -91,8 +95,13 @@ onBeforeUnmount(() => {
                 description="Search across the modules your current role is allowed to access."
             />
 
-            <section class="rounded-[1.5rem] border border-border/70 bg-card/85 p-5 shadow-sm backdrop-blur">
-                <form class="flex flex-col gap-3 md:flex-row" @submit.prevent="submit">
+            <section
+                class="rounded-[1.5rem] border border-border/70 bg-card/85 p-5 shadow-sm backdrop-blur"
+            >
+                <form
+                    class="flex flex-col gap-3 md:flex-row"
+                    @submit.prevent="submit"
+                >
                     <Input
                         v-model="query"
                         autofocus
@@ -133,8 +142,12 @@ onBeforeUnmount(() => {
                 >
                     <div class="flex items-center justify-between gap-3">
                         <div>
-                            <h2 class="text-lg font-semibold">{{ group.title }}</h2>
-                            <p class="text-sm text-muted-foreground">{{ group.count }} result(s)</p>
+                            <h2 class="text-lg font-semibold">
+                                {{ group.title }}
+                            </h2>
+                            <p class="text-sm text-muted-foreground">
+                                {{ group.count }} result(s)
+                            </p>
                         </div>
                     </div>
 
@@ -147,9 +160,14 @@ onBeforeUnmount(() => {
                         >
                             <div>
                                 <div class="font-medium">{{ item.title }}</div>
-                                <div class="mt-1 text-sm text-muted-foreground">{{ item.description }}</div>
+                                <div class="mt-1 text-sm text-muted-foreground">
+                                    {{ item.description }}
+                                </div>
                             </div>
-                            <div v-if="item.meta" class="shrink-0 text-xs text-muted-foreground">
+                            <div
+                                v-if="item.meta"
+                                class="shrink-0 text-xs text-muted-foreground"
+                            >
                                 {{ item.meta }}
                             </div>
                         </Link>

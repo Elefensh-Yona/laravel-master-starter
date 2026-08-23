@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, Shield, Sparkles } from 'lucide-vue-next';
-import InputError from '@/components/InputError.vue';
 import FormSection from '@/components/admin/FormSection.vue';
 import RolePermissionCard from '@/components/admin/RolePermissionCard.vue';
+import InputError from '@/components/InputError.vue';
 import PageContainer from '@/components/PageContainer.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create as createRole, index as rolesIndex, store as storeRole } from '@/routes/roles';
+import {
+    create as createRole,
+    index as rolesIndex,
+    store as storeRole,
+} from '@/routes/roles';
 import type { BreadcrumbItem, PermissionGroup } from '@/types';
 
 type Props = {
     permissionGroups: PermissionGroup[];
 };
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -51,7 +55,9 @@ const submit = (): void => {
                 description="Use roles to group permissions into reusable access bundles instead of managing users one permission at a time."
             >
                 <template #eyebrow>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100">
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100"
+                    >
                         <Sparkles class="size-3.5" />
                         New access profile
                     </div>
@@ -71,7 +77,11 @@ const submit = (): void => {
                     <div class="grid gap-5 md:grid-cols-2">
                         <div class="grid gap-2">
                             <Label for="name">Role name</Label>
-                            <Input id="name" v-model="form.name" placeholder="SupportLead" />
+                            <Input
+                                id="name"
+                                v-model="form.name"
+                                placeholder="SupportLead"
+                            />
                             <InputError :message="form.errors.name" />
                         </div>
 
@@ -81,7 +91,7 @@ const submit = (): void => {
                                 id="description"
                                 v-model="form.description"
                                 rows="4"
-                                class="flex min-h-28 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                                class="flex min-h-28 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                                 placeholder="Explain what this role is meant to do."
                             />
                             <InputError :message="form.errors.description" />

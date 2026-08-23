@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, Shield, ShieldCheck } from 'lucide-vue-next';
-import InputError from '@/components/InputError.vue';
 import FormSection from '@/components/admin/FormSection.vue';
 import RolePermissionCard from '@/components/admin/RolePermissionCard.vue';
+import InputError from '@/components/InputError.vue';
 import PageContainer from '@/components/PageContainer.vue';
 import PageHeader from '@/components/PageHeader.vue';
 import { Badge } from '@/components/ui/badge';
@@ -11,7 +11,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { edit as editRole, index as rolesIndex, update as updateRole } from '@/routes/roles';
+import {
+    edit as editRole,
+    index as rolesIndex,
+    update as updateRole,
+} from '@/routes/roles';
 import { update as updateRolePermissions } from '@/routes/roles/permissions';
 import type { BreadcrumbItem, ManagedRole, PermissionGroup } from '@/types';
 
@@ -61,7 +65,9 @@ const savePermissions = (): void => {
                 description="Update role metadata and the exact permissions this role should carry across the application."
             >
                 <template #eyebrow>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100">
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100"
+                    >
                         <ShieldCheck class="size-3.5" />
                         Role editor
                     </div>
@@ -87,7 +93,12 @@ const savePermissions = (): void => {
                     description="System role names are fixed so the boilerplate always keeps predictable baseline roles."
                 >
                     <template #headerAction>
-                        <Button type="submit" :disabled="detailsForm.processing || !detailsForm.isDirty">
+                        <Button
+                            type="submit"
+                            :disabled="
+                                detailsForm.processing || !detailsForm.isDirty
+                            "
+                        >
                             Save details
                         </Button>
                     </template>
@@ -109,9 +120,11 @@ const savePermissions = (): void => {
                                 id="description"
                                 v-model="detailsForm.description"
                                 rows="4"
-                                class="flex min-h-28 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none ring-offset-background placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                                class="flex min-h-28 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs ring-offset-background outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                             />
-                            <InputError :message="detailsForm.errors.description" />
+                            <InputError
+                                :message="detailsForm.errors.description"
+                            />
                         </div>
                     </div>
                 </FormSection>
@@ -121,13 +134,17 @@ const savePermissions = (): void => {
                 <RolePermissionCard
                     v-model:permissions="permissionsForm.permissions"
                     :permission-groups="permissionGroups"
-                    :disabled="permissionsForm.processing || role.name === 'Admin'"
+                    :disabled="permissionsForm.processing || role.isSuperAdmin"
                 />
                 <InputError :message="permissionsForm.errors.permissions" />
                 <div class="flex items-center justify-end gap-3">
                     <Button
                         type="submit"
-                        :disabled="permissionsForm.processing || !permissionsForm.isDirty || role.name === 'Admin'"
+                        :disabled="
+                            permissionsForm.processing ||
+                            !permissionsForm.isDirty ||
+                            role.isSuperAdmin
+                        "
                     >
                         <Shield class="size-4" />
                         Save permissions

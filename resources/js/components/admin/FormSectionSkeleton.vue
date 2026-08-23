@@ -15,7 +15,9 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <section class="rounded-[1.5rem] border border-border/70 bg-card/85 shadow-sm backdrop-blur">
+    <section
+        class="rounded-[1.5rem] border border-border/70 bg-card/85 shadow-sm backdrop-blur"
+    >
         <div v-if="withHeader" class="border-b border-border/60 px-5 py-5">
             <div class="h-5 w-40 animate-pulse rounded-full bg-muted" />
             <div class="mt-3 h-4 w-3/4 animate-pulse rounded-full bg-muted" />
