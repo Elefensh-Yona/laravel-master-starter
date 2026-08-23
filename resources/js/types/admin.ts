@@ -7,6 +7,7 @@ export type ManagedRole = {
     permissionsCount: number;
     isSystem: boolean;
     canDelete: boolean;
+    isSuperAdmin: boolean;
 };
 
 export type ManagedUser = {
@@ -17,62 +18,6 @@ export type ManagedUser = {
     isCurrentUser: boolean;
     emailVerifiedAt: string | null;
     createdAt: string | null;
-    notes?: ManagedNote[];
-};
-
-export type ManagedPage = {
-    id: number;
-    title: string;
-    slug: string;
-    excerpt: string | null;
-    content?: string;
-    seoTitle?: string | null;
-    seoDescription?: string | null;
-    status: string;
-    statusLabel: string;
-    statusTone: string;
-    isPublished: boolean;
-    publishedAt: string | null;
-    updatedAt: string | null;
-    publicUrl: string | null;
-    isDeleted: boolean;
-    deletedAt: string | null;
-    notes?: ManagedNote[];
-};
-
-export type ManagedImportRun = {
-    id: number;
-    fileName: string;
-    status: string;
-    rowsCount: number;
-    validRowsCount: number;
-    importedRowsCount: number;
-    completedAt: string | null;
-    createdAt: string | null;
-};
-
-export type PageImportPreviewRow = {
-    line: number;
-    title: string;
-    slug: string;
-    excerpt: string | null;
-    content: string;
-    seo_title: string | null;
-    seo_description: string | null;
-    status: string;
-    valid: boolean;
-    errors: string[];
-};
-
-export type PageImportPreview = {
-    importRunId: number;
-    fileName: string;
-    rows: PageImportPreviewRow[];
-    summary: {
-        rows: number;
-        validRows: number;
-        invalidRows: number;
-    };
 };
 
 export type ManagedSettingField = {
@@ -102,20 +47,6 @@ export type ManagedMedia = {
     uploadedBy: string | null;
     createdAt: string | null;
     downloadUrl: string;
-};
-
-export type ManagedNote = {
-    id: number;
-    content: string;
-    author: string | null;
-    createdAt: string | null;
-    canDelete: boolean;
-};
-
-export type NoteTarget = {
-    type: string;
-    id: number;
-    title: string;
 };
 
 export type RoleOption = {

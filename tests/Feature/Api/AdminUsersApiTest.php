@@ -7,10 +7,10 @@ test('admin api user listing returns paginated users', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     User::factory()->count(3)->create()->each(
-        fn (User $user) => $user->assignRole('Member'),
+        fn (User $user) => $user->assignRole('Staff'),
     );
 
     $token = $admin->createToken('postman')->plainTextToken;
@@ -55,7 +55,7 @@ test('member cannot access the admin users api endpoint', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     $token = $member->createToken('android')->plainTextToken;
 

@@ -23,7 +23,9 @@ withDefaults(defineProps<Props>(), {
             <component :is="icon" class="size-5" />
         </div>
         <h2 class="mt-4 text-lg font-semibold">{{ title }}</h2>
-        <p class="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
+        <p
+            class="mx-auto mt-2 max-w-xl text-sm leading-6 text-muted-foreground"
+        >
             {{ description }}
         </p>
         <div v-if="$slots.actions" class="mt-5 flex justify-center gap-2">

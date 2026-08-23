@@ -8,7 +8,7 @@ test('admin can create a custom role with permissions', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $this->actingAs($admin)
         ->post(route('roles.store'), [
@@ -28,7 +28,7 @@ test('admin can update custom role metadata', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $role = Role::query()->create([
         'name' => 'SupportLead',
@@ -50,7 +50,7 @@ test('admin can delete a custom role but not a system role', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $role = Role::query()->create([
         'name' => 'SupportLead',

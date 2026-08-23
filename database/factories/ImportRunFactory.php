@@ -20,9 +20,9 @@ class ImportRunFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'resource' => 'pages',
+            'resource' => 'records',
             'status' => 'previewed',
-            'file_name' => 'pages.csv',
+            'file_name' => 'records.csv',
             'rows_count' => 2,
             'valid_rows_count' => 2,
             'imported_rows_count' => 0,

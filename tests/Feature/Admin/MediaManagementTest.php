@@ -11,7 +11,7 @@ test('admin can view the media library', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     Media::factory()->count(2)->create([
         'uploaded_by' => $admin->id,
@@ -57,7 +57,7 @@ test('admin can download and delete media', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $media = Media::factory()->create([
         'uploaded_by' => $admin->id,
@@ -85,7 +85,7 @@ test('member cannot access media routes', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     $this->actingAs($member)
         ->get(route('media.index'))

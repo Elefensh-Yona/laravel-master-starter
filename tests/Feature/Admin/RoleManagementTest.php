@@ -8,7 +8,7 @@ test('admin can update a role permission set', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $managerRole = Role::findByName('Manager');
 
@@ -31,9 +31,9 @@ test('admin role cannot be edited from the role management screen', function () 
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
-    $role = Role::findByName('Admin');
+    $role = Role::findByName('Super Admin');
 
     $this->actingAs($admin)
         ->from(route('roles.edit', $role))
@@ -50,7 +50,7 @@ test('manager cannot update roles without the update permission', function () {
     $manager = User::factory()->create();
     $manager->assignRole('Manager');
 
-    $role = Role::findByName('Member');
+    $role = Role::findByName('Staff');
 
     $this->actingAs($manager)
         ->put(route('roles.permissions.update', $role), [

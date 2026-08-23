@@ -31,14 +31,8 @@ const { isCurrentUrl } = useCurrentUrl();
 </script>
 
 <template>
-    <template
-        v-for="(group, index) in items"
-        :key="group.title"
-    >
-        <SidebarSeparator
-            v-if="index > 0"
-            class="mx-2 my-3"
-        />
+    <template v-for="(group, index) in items" :key="group.title">
+        <SidebarSeparator v-if="index > 0" class="mx-2 my-3" />
         <Collapsible :open="openGroups[group.title]">
             <SidebarGroup class="px-2 py-0">
                 <SidebarGroupLabel>{{ group.title }}</SidebarGroupLabel>
@@ -49,7 +43,11 @@ const { isCurrentUrl } = useCurrentUrl();
                     >
                         <ChevronDown
                             class="transition-transform duration-200"
-                            :class="openGroups[group.title] ? 'rotate-0' : '-rotate-90'"
+                            :class="
+                                openGroups[group.title]
+                                    ? 'rotate-0'
+                                    : '-rotate-90'
+                            "
                         />
                     </SidebarGroupAction>
                 </CollapsibleTrigger>

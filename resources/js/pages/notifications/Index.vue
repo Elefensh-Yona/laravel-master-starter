@@ -8,7 +8,11 @@ import PageHeader from '@/components/PageHeader.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index as notificationsIndex, readAll as notificationsReadAll, read as notificationsRead } from '@/routes/notifications';
+import {
+    index as notificationsIndex,
+    readAll as notificationsReadAll,
+    read as notificationsRead,
+} from '@/routes/notifications';
 import type {
     BreadcrumbItem,
     ManagedNotification,
@@ -23,7 +27,7 @@ type Props = {
     stats: NotificationStats;
 };
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -49,15 +53,23 @@ const setFilter = (read: string): void => {
 };
 
 const markRead = (notification: ManagedNotification): void => {
-    router.post(notificationsRead(notification.id).url, {}, {
-        preserveScroll: true,
-    });
+    router.post(
+        notificationsRead(notification.id).url,
+        {},
+        {
+            preserveScroll: true,
+        },
+    );
 };
 
 const markAllRead = (): void => {
-    router.post(notificationsReadAll().url, {}, {
-        preserveScroll: true,
-    });
+    router.post(
+        notificationsReadAll().url,
+        {},
+        {
+            preserveScroll: true,
+        },
+    );
 };
 </script>
 
@@ -71,7 +83,9 @@ const markAllRead = (): void => {
                 description="Review unread updates, acknowledge them, and keep a simple in-app signal for each signed-in user."
             >
                 <template #eyebrow>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100">
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100"
+                    >
                         <BellRing class="size-3.5" />
                         Notification center
                     </div>
@@ -88,15 +102,25 @@ const markAllRead = (): void => {
             </PageHeader>
 
             <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                <div class="rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur">
+                <div
+                    class="rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur"
+                >
                     <div class="text-sm text-muted-foreground">Unread</div>
-                    <div class="mt-2 text-2xl font-semibold">{{ stats.unreadCount }}</div>
+                    <div class="mt-2 text-2xl font-semibold">
+                        {{ stats.unreadCount }}
+                    </div>
                 </div>
-                <div class="rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur">
+                <div
+                    class="rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur"
+                >
                     <div class="text-sm text-muted-foreground">Total</div>
-                    <div class="mt-2 text-2xl font-semibold">{{ stats.totalCount }}</div>
+                    <div class="mt-2 text-2xl font-semibold">
+                        {{ stats.totalCount }}
+                    </div>
                 </div>
-                <div class="flex items-center gap-2 rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur">
+                <div
+                    class="flex items-center gap-2 rounded-[1.25rem] border border-border/70 bg-card/85 p-4 shadow-sm backdrop-blur"
+                >
                     <Button
                         :variant="filters.read === '' ? 'default' : 'outline'"
                         @click="setFilter('')"
@@ -104,13 +128,17 @@ const markAllRead = (): void => {
                         All
                     </Button>
                     <Button
-                        :variant="filters.read === 'unread' ? 'default' : 'outline'"
+                        :variant="
+                            filters.read === 'unread' ? 'default' : 'outline'
+                        "
                         @click="setFilter('unread')"
                     >
                         Unread
                     </Button>
                     <Button
-                        :variant="filters.read === 'read' ? 'default' : 'outline'"
+                        :variant="
+                            filters.read === 'read' ? 'default' : 'outline'
+                        "
                         @click="setFilter('read')"
                     >
                         Read
@@ -125,12 +153,16 @@ const markAllRead = (): void => {
                 :empty-icon="Bell"
             >
                 <template #head>
-                    <tr class="text-left text-xs tracking-wide text-muted-foreground uppercase">
+                    <tr
+                        class="text-left text-xs tracking-wide text-muted-foreground uppercase"
+                    >
                         <th class="px-4 py-3 font-medium">Title</th>
                         <th class="px-4 py-3 font-medium">Message</th>
                         <th class="px-4 py-3 font-medium">Status</th>
                         <th class="px-4 py-3 font-medium">Created</th>
-                        <th class="px-4 py-3 font-medium text-right">Actions</th>
+                        <th class="px-4 py-3 text-right font-medium">
+                            Actions
+                        </th>
                     </tr>
                 </template>
 
@@ -145,16 +177,30 @@ const markAllRead = (): void => {
                                 {{ notification.title }}
                             </div>
                         </td>
-                        <td class="px-4 py-4 text-sm leading-6 text-muted-foreground">
+                        <td
+                            class="px-4 py-4 text-sm leading-6 text-muted-foreground"
+                        >
                             {{ notification.message }}
                         </td>
                         <td class="px-4 py-4">
-                            <Badge :variant="notification.readAt ? 'outline' : 'secondary'">
+                            <Badge
+                                :variant="
+                                    notification.readAt
+                                        ? 'outline'
+                                        : 'secondary'
+                                "
+                            >
                                 {{ notification.readAt ? 'Read' : 'Unread' }}
                             </Badge>
                         </td>
                         <td class="px-4 py-4 text-sm text-muted-foreground">
-                            {{ notification.createdAt ? new Date(notification.createdAt).toLocaleString() : 'N/A' }}
+                            {{
+                                notification.createdAt
+                                    ? new Date(
+                                          notification.createdAt,
+                                      ).toLocaleString()
+                                    : 'N/A'
+                            }}
                         </td>
                         <td class="px-4 py-4">
                             <div class="flex items-center justify-end gap-2">

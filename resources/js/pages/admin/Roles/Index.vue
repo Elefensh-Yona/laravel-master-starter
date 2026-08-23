@@ -12,8 +12,18 @@ import PageHeader from '@/components/PageHeader.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create as createRole, destroy as destroyRole, edit as editRole, index as rolesIndex } from '@/routes/roles';
-import type { BreadcrumbItem, ManagedRole, PaginatedResource, ResourceFilters } from '@/types';
+import {
+    create as createRole,
+    destroy as destroyRole,
+    edit as editRole,
+    index as rolesIndex,
+} from '@/routes/roles';
+import type {
+    BreadcrumbItem,
+    ManagedRole,
+    PaginatedResource,
+    ResourceFilters,
+} from '@/types';
 
 type Props = {
     roles: PaginatedResource<ManagedRole>;
@@ -69,7 +79,9 @@ const deleteSelectedRole = (role: ManagedRole): void => {
                 description="Manage role records, their descriptions, and the permissions that decide sidebar visibility, route access, and future CRUD actions."
             >
                 <template #eyebrow>
-                    <div class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100">
+                    <div
+                        class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-medium tracking-[0.2em] text-sky-900 uppercase dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-100"
+                    >
                         <Shield class="size-3.5" />
                         Access model
                     </div>
@@ -98,12 +110,16 @@ const deleteSelectedRole = (role: ManagedRole): void => {
                 :empty-icon="Shield"
             >
                 <template #head>
-                    <tr class="text-left text-xs tracking-wide text-muted-foreground uppercase">
+                    <tr
+                        class="text-left text-xs tracking-wide text-muted-foreground uppercase"
+                    >
                         <th class="px-4 py-3 font-medium">Role</th>
                         <th class="px-4 py-3 font-medium">Description</th>
                         <th class="px-4 py-3 font-medium">Permissions</th>
                         <th class="px-4 py-3 font-medium">Users</th>
-                        <th class="px-4 py-3 font-medium text-right">Actions</th>
+                        <th class="px-4 py-3 text-right font-medium">
+                            Actions
+                        </th>
                     </tr>
                 </template>
 
@@ -127,7 +143,9 @@ const deleteSelectedRole = (role: ManagedRole): void => {
                                 </Badge>
                             </div>
                         </td>
-                        <td class="px-4 py-4 text-sm leading-6 text-muted-foreground">
+                        <td
+                            class="px-4 py-4 text-sm leading-6 text-muted-foreground"
+                        >
                             {{ role.description || 'No description yet.' }}
                         </td>
                         <td class="px-4 py-4">

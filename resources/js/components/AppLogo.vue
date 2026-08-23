@@ -4,7 +4,7 @@ import { computed } from 'vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 
 const page = usePage();
-const appName = computed(() => page.props.name ?? 'Application Boilerplate');
+const appName = computed(() => page.props.name ?? 'Laravel Master Starter');
 </script>
 
 <template>
@@ -14,8 +14,10 @@ const appName = computed(() => page.props.name ?? 'Application Boilerplate');
         <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
     </div>
     <div class="ml-2 grid flex-1 text-left text-sm">
-        <span class="truncate text-[0.7rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
-            Starter
+        <span
+            class="truncate text-[0.7rem] font-medium tracking-[0.18em] text-muted-foreground uppercase"
+        >
+            Master Starter
         </span>
         <span class="truncate leading-tight font-semibold">
             {{ appName }}

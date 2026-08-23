@@ -31,7 +31,7 @@ const onChange = (event: Event): void => {
             :accept="accept"
             class="block w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-medium file:text-primary-foreground"
             @change="onChange"
-        >
+        />
         <p v-if="description" class="text-sm leading-6 text-muted-foreground">
             {{ description }}
         </p>

@@ -11,7 +11,7 @@ test('activity log index displays audit entries and filters by event', function 
     $admin = User::factory()->create([
         'name' => 'Audit Admin',
     ]);
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     ActivityLog::factory()->create([
         'actor_id' => $admin->id,
@@ -43,7 +43,7 @@ test('manager can access the activity log index but member cannot', function () 
     $manager->assignRole('Manager');
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     $this->actingAs($manager)
         ->get(route('activity-logs.index'))
@@ -58,7 +58,7 @@ test('activity log detail page displays the recorded payload', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $log = ActivityLog::factory()->create([
         'actor_id' => $admin->id,

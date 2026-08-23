@@ -47,10 +47,7 @@ defineProps<Props<unknown>>();
                         Next
                         <ChevronRight class="size-4" />
                     </span>
-                    <span
-                        v-else
-                        v-html="link.label"
-                    />
+                    <span v-else v-html="link.label" />
                 </Link>
                 <span v-else v-html="link.label" />
             </Button>

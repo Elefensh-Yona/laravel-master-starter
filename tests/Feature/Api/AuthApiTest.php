@@ -12,7 +12,7 @@ test('api login returns a bearer token and the current users rbac context', func
         'email' => 'api-admin@example.com',
         'password' => 'password',
     ]);
-    $user->assignRole('Admin');
+    $user->assignRole('Super Admin');
 
     $response = $this->postJson('/api/v1/auth/login', [
         'email' => 'api-admin@example.com',
@@ -58,7 +58,7 @@ test('api logout revokes the current token', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $user = User::factory()->create();
-    $user->assignRole('Member');
+    $user->assignRole('Staff');
 
     $token = $user->createToken('android')->plainTextToken;
 

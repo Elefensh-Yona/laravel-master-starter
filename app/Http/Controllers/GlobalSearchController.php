@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SearchIndexRequest;
 use App\Models\ActivityLog;
-use App\Models\Page;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -40,7 +39,6 @@ class GlobalSearchController extends Controller
     private function buildResults(string $query, User $user): array
     {
         return collect([
-            $user->can('pages.view') ? $this->searchPages($query) : null,
             $user->can('users.view') ? $this->searchUsers($query) : null,
             $user->can('roles.view') ? $this->searchRoles($query) : null,
             $user->can('notifications.view') ? $this->searchNotifications($query, $user) : null,
@@ -79,39 +77,6 @@ class GlobalSearchController extends Controller
         return [
             'key' => 'users',
             'title' => 'Users',
-            'count' => count($items),
-            'items' => $items,
-        ];
-    }
-
-    /**
-     * @return array{key: string, title: string, count: int, items: array<int, array{id: string, title: string, description: string, href: string, meta: string|null}>}
-     */
-    private function searchPages(string $query): array
-    {
-        $items = Page::query()
-            ->where(function ($pageQuery) use ($query): void {
-                $pageQuery
-                    ->where('title', 'like', "%{$query}%")
-                    ->orWhere('slug', 'like', "%{$query}%")
-                    ->orWhere('excerpt', 'like', "%{$query}%");
-            })
-            ->latest('updated_at')
-            ->limit(5)
-            ->get()
-            ->map(fn (Page $page): array => [
-                'id' => "page-{$page->id}",
-                'title' => $page->title,
-                'description' => $page->excerpt ?? 'Public page',
-                'href' => route('pages.edit', $page),
-                'meta' => $page->is_published ? 'Published' : 'Draft',
-            ])
-            ->values()
-            ->all();
-
-        return [
-            'key' => 'pages',
-            'title' => 'Pages',
             'count' => count($items),
             'items' => $items,
         ];

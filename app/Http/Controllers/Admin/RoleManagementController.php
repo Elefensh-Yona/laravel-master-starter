@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreRoleRequest;
 use App\Http\Requests\Admin\UpdateRoleDetailsRequest;
 use App\Http\Requests\Admin\UpdateRoleRequest;
 use App\Support\ActivityLogger;
+use App\Support\SystemRole;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -17,8 +18,6 @@ use Spatie\Permission\Models\Role;
 
 class RoleManagementController extends Controller
 {
-    private const SYSTEM_ROLE_NAMES = ['Admin', 'Manager', 'Member', 'ReadOnly', 'External'];
-
     /**
      * Show the role management page.
      */
@@ -147,9 +146,9 @@ class RoleManagementController extends Controller
     {
         $this->authorize('updatePermissions', $role);
 
-        if ($role->name === 'Admin') {
+        if ($role->name === SystemRole::SUPER_ADMIN) {
             return to_route('roles.edit', $role)->withErrors([
-                'permissions' => 'The Admin role is managed automatically and cannot be edited from this screen.',
+                'permissions' => 'The Super Admin role is managed automatically and cannot be edited from this screen.',
             ]);
         }
 
@@ -210,19 +209,11 @@ class RoleManagementController extends Controller
             'dashboard.view' => 'Allows the role to enter the dashboard workspace.',
             'search.view' => 'Allows use of the shared global search page across enabled modules.',
             'exports.view' => 'Allows access to the shared export and print center.',
-            'settings.view' => 'Shows the shared business settings workspace and its read-only metadata.',
-            'settings.update' => 'Allows updating shared application, organization, and public website settings.',
+            'settings.view' => 'Shows the shared settings workspace and its read-only metadata.',
+            'settings.update' => 'Allows updating shared application and organization settings.',
             'media.view' => 'Shows the shared media library and download-ready file listings.',
             'media.create' => 'Allows uploading files into the shared media library for future attachments.',
             'media.delete' => 'Allows deleting files from the shared media library.',
-            'notes.view' => 'Shows internal notes attached to supported records such as users, pages, and files.',
-            'notes.create' => 'Allows creating internal notes on supported records.',
-            'notes.delete' => 'Allows deleting internal notes from supported records.',
-            'reports.view' => 'Shows shared dashboard reporting surfaces and download-ready report outputs.',
-            'pages.view' => 'Shows the public pages module and allows access to the page index.',
-            'pages.create' => 'Allows creating new public pages for the guest-facing website.',
-            'pages.update' => 'Allows editing page content, slug, SEO, and publish state.',
-            'pages.delete' => 'Allows deleting public pages that are no longer needed.',
             'users.view' => 'Shows the users module and allows access to the users index page.',
             'users.create' => 'Allows creating new users when user creation is added later.',
             'users.update' => 'Allows editing user details, roles, and future user actions.',
@@ -264,7 +255,7 @@ class RoleManagementController extends Controller
     /**
      * Normalize a role for table and page props.
      *
-     * @return array{id: int, name: string, description: string|null, permissions: array<int, string>, usersCount: int, permissionsCount: int, isSystem: bool, canDelete: bool}
+     * @return array{id: int, name: string, description: string|null, permissions: array<int, string>, usersCount: int, permissionsCount: int, isSystem: bool, canDelete: bool, isSuperAdmin: bool}
      */
     private function roleSummary(Role $role): array
     {
@@ -279,11 +270,12 @@ class RoleManagementController extends Controller
             'permissionsCount' => $role->permissions_count ?? $role->permissions()->count(),
             'isSystem' => $this->isSystemRole($role),
             'canDelete' => ! $this->isSystemRole($role),
+            'isSuperAdmin' => $role->name === SystemRole::SUPER_ADMIN,
         ];
     }
 
     private function isSystemRole(Role $role): bool
     {
-        return in_array($role->name, self::SYSTEM_ROLE_NAMES, true);
+        return in_array($role->name, SystemRole::names(), true);
     }
 }

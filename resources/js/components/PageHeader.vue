@@ -14,7 +14,9 @@ defineProps<Props>();
         <div class="min-w-0 space-y-2">
             <slot name="eyebrow" />
             <div>
-                <h1 class="text-2xl font-semibold tracking-tight text-foreground">
+                <h1
+                    class="text-2xl font-semibold tracking-tight text-foreground"
+                >
                     {{ title }}
                 </h1>
                 <p

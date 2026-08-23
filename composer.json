@@ -1,12 +1,12 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "yonassayfu/starter-core",
+    "name": "elefensh-yona/laravel-master-starter",
     "type": "project",
-    "description": "Reusable Laravel starter-core boilerplate for admin and public applications.",
+    "description": "Laravel Master Starter - reusable domain-neutral Laravel boilerplate with auth, RBAC, notifications, audit logging, media, settings, and an API baseline.",
     "keywords": [
         "laravel",
         "boilerplate",
-        "starter-core",
+        "master-starter",
         "inertia"
     ],
     "license": "MIT",

@@ -7,7 +7,7 @@ test('admin can create a user and assign roles', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $this->actingAs($admin)
         ->post(route('users.store'), [
@@ -15,21 +15,21 @@ test('admin can create a user and assign roles', function () {
             'email' => 'sam.support@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
-            'roles' => ['Member'],
+            'roles' => ['Staff'],
         ])
         ->assertRedirect();
 
     $user = User::query()->where('email', 'sam.support@example.com')->firstOrFail();
 
     expect($user->name)->toBe('Sam Support')
-        ->and($user->hasRole('Member'))->toBeTrue();
+        ->and($user->hasRole('Staff'))->toBeTrue();
 });
 
 test('admin can update user details', function () {
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $user = User::factory()->create([
         'name' => 'Original Name',
@@ -53,7 +53,7 @@ test('admin can delete another user but not the current session user', function 
     $this->seed(RolePermissionSeeder::class);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $targetUser = User::factory()->create();
 

@@ -10,7 +10,10 @@ const flash = computed(() => (page.props.flash ?? {}) as SharedFlash);
 </script>
 
 <template>
-    <div v-if="flash.success || flash.error" class="space-y-3 px-4 pt-4 md:px-6">
+    <div
+        v-if="flash.success || flash.error"
+        class="space-y-3 px-4 pt-4 md:px-6"
+    >
         <Alert
             v-if="flash.success"
             class="border-emerald-200/80 bg-emerald-50/90 text-emerald-950 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-50"

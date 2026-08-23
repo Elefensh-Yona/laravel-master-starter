@@ -6,26 +6,26 @@ use Database\Seeders\RolePermissionSeeder;
 use Database\Seeders\SettingsSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
-test('admin can view the settings editor', function () {
+test('super admin can view the settings editor', function () {
     $this->seed([RolePermissionSeeder::class, SettingsSeeder::class]);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $this->actingAs($admin)
         ->get(route('admin-settings.edit'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('admin/Settings/Edit')
-            ->has('settingGroups', 3),
+            ->has('settingGroups', 2),
         );
 });
 
-test('admin can update shared business settings', function () {
+test('super admin can update shared application and organization settings', function () {
     $this->seed([RolePermissionSeeder::class, SettingsSeeder::class]);
 
     $admin = User::factory()->create();
-    $admin->assignRole('Admin');
+    $admin->assignRole('Super Admin');
 
     $this->actingAs($admin)
         ->put(route('admin-settings.update'), [
@@ -36,22 +36,16 @@ test('admin can update shared business settings', function () {
             'organization_legal_name' => 'Acme Group PLC',
             'organization_email' => 'hello@acme.test',
             'organization_phone' => '+251911000000',
-            'public_site_title' => 'Acme Platform',
-            'public_tagline' => 'Operations, visibility, and control.',
-            'public_cta_label' => 'Explore the handbook',
-            'public_cta_url' => '/handbook?document=roadmap',
-            'public_footer_text' => 'Acme combines public presence with operator control.',
         ])
         ->assertRedirect(route('admin-settings.edit'));
 
     expect(Setting::query()->where('key', 'app_display_name')->value('value'))->toBe('Acme Operations')
-        ->and(Setting::query()->where('key', 'public_site_title')->value('value'))->toBe('Acme Platform');
+        ->and(Setting::query()->where('key', 'organization_name')->value('value'))->toBe('Acme Group');
 
-    $this->get(route('home'))
+    $this->get(route('admin-settings.edit'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->where('name', 'Acme Operations')
-            ->where('settings.publicSiteTitle', 'Acme Platform')
             ->where('settings.organizationName', 'Acme Group'),
         );
 });
@@ -75,20 +69,15 @@ test('manager can view but not update settings', function () {
             'organization_legal_name' => '',
             'organization_email' => '',
             'organization_phone' => '',
-            'public_site_title' => '',
-            'public_tagline' => '',
-            'public_cta_label' => '',
-            'public_cta_url' => '',
-            'public_footer_text' => '',
         ])
         ->assertForbidden();
 });
 
-test('member cannot access business settings', function () {
+test('staff cannot access settings administration', function () {
     $this->seed([RolePermissionSeeder::class, SettingsSeeder::class]);
 
     $member = User::factory()->create();
-    $member->assignRole('Member');
+    $member->assignRole('Staff');
 
     $this->actingAs($member)
         ->get(route('admin-settings.edit'))

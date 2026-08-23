@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import EmptyState from '@/components/EmptyState.vue';
 import type { FunctionalComponent, HTMLAttributes, VNodeProps } from 'vue';
+import EmptyState from '@/components/EmptyState.vue';
 
 type Props = {
     hasResults: boolean;
@@ -13,7 +13,9 @@ defineProps<Props>();
 </script>
 
 <template>
-    <div class="rounded-[1.5rem] border border-border/70 bg-card/85 shadow-sm backdrop-blur">
+    <div
+        class="rounded-[1.5rem] border border-border/70 bg-card/85 shadow-sm backdrop-blur"
+    >
         <div v-if="hasResults" class="overflow-x-auto">
             <table class="min-w-full divide-y divide-border/70 text-sm">
                 <thead class="bg-muted/40">

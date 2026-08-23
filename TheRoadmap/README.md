@@ -1,39 +1,27 @@
 # TheRoadmap
 
-This folder is the standalone planning set for turning this repo into a reusable Laravel 12 + Inertia + Vue boilerplate.
+Planning and learning documentation for the Laravel Master Starter boilerplate
+(Laravel 12 + Inertia + Vue + Fortify + Sanctum + Spatie Permission).
 
-It exists so the important planning and UI guidance can live outside `Refernce/` and remain safe even after you manually delete that folder.
+## Current Documentation
 
-## Files
+- `BoilerplateRoadmap.md`: the implementation roadmap and phase-by-phase delivery plan (historical record of how the boilerplate was built).
+- `BoilerplateTaskList.md`: the detailed checklist version of the roadmap (historical record).
+- `followTemplate.md`: the extracted UI, UX, and implementation patterns to follow when adding new modules.
+- `guidanceIntergartion.md`: how to integrate a new module, entity, page, and permissions into the boilerplate without breaking the structure.
+- `decisions.md`: architectural and workflow decisions for the boilerplate.
+- `production-readiness.md`: production deployment checklist.
+- `mailtesting.md`: local mail testing guidance (Mailpit and SMTP sinks).
+- `gitguidance.md`: the branch, commit, phase, and push workflow.
+- `mcpguidance.md`: guidance for Laravel MCP during development.
+- `talkewithai.md`: handoff prompt and working guidance for AI coding assistants.
+- `laravelbasics.md`: learning notes explaining what was implemented and the Laravel concepts involved (historical learning journal; older entries may reference removed starter-level features).
+- `ReferenceCarryover.md`: what was intentionally preserved or left out from the original reference material (historical).
 
-- `BoilerplateRoadmap.md`: the full implementation roadmap, scope, and phase-by-phase delivery plan.
-- `BoilerplateTaskList.md`: the detailed checklist version of the roadmap.
-- `followTemplate.md`: the extracted UI, UX, and implementation patterns to follow later during code work.
-- `ReferenceCarryover.md`: what was intentionally preserved from `Refernce/` and what was intentionally left out.
-- `decisions.md`: short architectural and workflow decisions for the boilerplate.
-- `laravelbasics.md`: learning notes that explain what was implemented and which Laravel concepts were involved.
-- `mcpguidance.md`: practical guidance for Laravel MCP, Herd MCP, and how they help during development.
-- `gitguidance.md`: the branch, commit, phase, and push workflow for this project.
+## Historical Note
 
-## Current Direction
-
-The target is a domain-neutral boilerplate, not an asset-management clone.
-
-That means the reusable V1 scope is:
-
-- Auth, security, profile, appearance
-- RBAC and policy foundation
-- Admin shell and reusable CRUD patterns
-- Users and roles administration
-- Notifications and activity logs
-- API baseline
-- Developer and operations docs
-
-## Working Rule
-
-From now on:
-
-- completed work should be reflected in `BoilerplateTaskList.md`
-- Laravel learning notes should be appended to `laravelbasics.md`
-- phase and branch workflow should follow `gitguidance.md`
-- MCP usage notes and practical guidance should live in `mcpguidance.md`
+The starter-level system (`starter-core-v1`, `starter-business-v1`) and the
+public-website phase were removed during the domain-neutral cleanup. Their
+dedicated planning documents were deleted; mentions of them inside historical
+roadmap entries and learning-journal entries describe past states of the
+repository and were intentionally left intact.

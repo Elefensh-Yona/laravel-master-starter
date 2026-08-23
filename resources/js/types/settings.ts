@@ -6,9 +6,4 @@ export type SharedSettings = {
     organizationLegalName: string | null;
     organizationEmail: string | null;
     organizationPhone: string | null;
-    publicSiteTitle: string | null;
-    publicTagline: string | null;
-    publicCtaLabel: string | null;
-    publicCtaUrl: string | null;
-    publicFooterText: string | null;
 };

@@ -40,12 +40,21 @@ const breadcrumbs: BreadcrumbItem[] = [
                 >
                     <div class="flex items-center gap-3">
                         <div class="rounded-2xl bg-muted p-3">
-                            <FileOutput v-if="resource.format === 'CSV'" class="size-5" />
+                            <FileOutput
+                                v-if="resource.format === 'CSV'"
+                                class="size-5"
+                            />
                             <Printer v-else class="size-5" />
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold">{{ resource.title }}</h2>
-                            <p class="text-xs uppercase tracking-[0.18em] text-muted-foreground">{{ resource.format }}</p>
+                            <h2 class="text-lg font-semibold">
+                                {{ resource.title }}
+                            </h2>
+                            <p
+                                class="text-xs tracking-[0.18em] text-muted-foreground uppercase"
+                            >
+                                {{ resource.format }}
+                            </p>
                         </div>
                     </div>
 
