@@ -16,7 +16,11 @@ test('manager can access the export center and print summary', function () {
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('exports/Index')
-            ->has('resources', 2),
+            ->has('resources', 5)
+            ->has('resources.0')
+            ->where('resources.1.key', 'users-xlsx')
+            ->where('resources.2.key', 'users-xml')
+            ->where('resources.4.key', 'workspace-pdf'),
         );
 
     $this->actingAs($manager)

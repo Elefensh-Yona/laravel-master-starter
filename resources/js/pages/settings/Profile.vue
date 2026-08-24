@@ -8,6 +8,13 @@ import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import { edit } from '@/routes/profile';
@@ -30,6 +37,9 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 const page = usePage();
 const user = computed(() => (page.props.auth as Auth).user as User);
+const availableLocales = computed<Record<string, string>>(
+    () => (page.props.availableLocales as Record<string, string>) ?? {},
+);
 </script>
 
 <template>
@@ -78,6 +88,29 @@ const user = computed(() => (page.props.auth as Auth).user as User);
                             placeholder="Email address"
                         />
                         <InputError class="mt-2" :message="errors.email" />
+                    </div>
+
+                    <div class="grid gap-2">
+                        <Label for="locale">Language</Label>
+                        <Select
+                            id="locale"
+                            :default-value="user.locale ?? 'en'"
+                            name="locale"
+                        >
+                            <SelectTrigger class="w-48">
+                                <SelectValue placeholder="Select a language" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem
+                                    v-for="(label, code) in availableLocales"
+                                    :key="code"
+                                    :value="code"
+                                >
+                                    {{ label }}
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <InputError class="mt-2" :message="errors.locale" />
                     </div>
 
                     <div v-if="mustVerifyEmail && !user.email_verified_at">

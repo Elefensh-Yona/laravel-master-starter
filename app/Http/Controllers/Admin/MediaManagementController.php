@@ -25,14 +25,7 @@ class MediaManagementController extends Controller
         return Inertia::render('admin/Media/Index', [
             'media' => Media::query()
                 ->with('uploadedBy:id,name,email')
-                ->when($search !== '', function ($query) use ($search): void {
-                    $query->where(function ($mediaQuery) use ($search): void {
-                        $mediaQuery
-                            ->where('original_name', 'ilike', "%{$search}%")
-                            ->orWhere('collection', 'ilike', "%{$search}%")
-                            ->orWhere('mime_type', 'ilike', "%{$search}%");
-                    });
-                })
+                ->when($search !== '', fn ($query) => $query->searchLike(['original_name', 'collection', 'mime_type'], $search))
                 ->latest()
                 ->paginate(10)
                 ->withQueryString()
@@ -52,6 +45,8 @@ class MediaManagementController extends Controller
             user: $request->user(),
             collection: $request->string('collection')->trim()->toString() ?: 'library',
         );
+
+        MediaUploader::generateThumbnail($media);
 
         ActivityLogger::record(
             actor: $request->user(),
@@ -81,7 +76,7 @@ class MediaManagementController extends Controller
     {
         $this->authorize('delete', $media);
 
-        Storage::disk($media->disk)->delete($media->path);
+        MediaUploader::deleteFiles($media);
 
         ActivityLogger::record(
             actor: $request->user(),
@@ -100,7 +95,7 @@ class MediaManagementController extends Controller
     }
 
     /**
-     * @return array{id: int, collection: string, originalName: string, extension: string|null, mimeType: string|null, size: int, uploadedBy: string|null, createdAt: string|null, downloadUrl: string}
+     * @return array{id: int, collection: string, originalName: string, extension: string|null, mimeType: string|null, size: int, uploadedBy: string|null, createdAt: string|null, downloadUrl: string, hasThumbnail: bool}
      */
     private function mediaSummary(Media $media): array
     {
@@ -114,6 +109,8 @@ class MediaManagementController extends Controller
             'uploadedBy' => $media->uploadedBy?->name,
             'createdAt' => $media->created_at?->toDateTimeString(),
             'downloadUrl' => route('media.download', $media),
+            'hasThumbnail' => $media->thumbnail_path !== null
+                && Storage::disk($media->disk)->exists($media->thumbnail_path),
         ];
     }
 }

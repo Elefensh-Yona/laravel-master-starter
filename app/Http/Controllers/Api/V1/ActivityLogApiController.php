@@ -21,13 +21,7 @@ class ActivityLogApiController extends Controller
 
         $logs = ActivityLog::query()
             ->with('actor')
-            ->when($search !== '', function ($query) use ($search): void {
-                $query->where(function ($logQuery) use ($search): void {
-                    $logQuery
-                        ->where('description', 'ilike', "%{$search}%")
-                        ->orWhere('event', 'ilike', "%{$search}%");
-                });
-            })
+            ->when($search !== '', fn ($query) => $query->searchLike(['description', 'event'], $search))
             ->when($event !== '', fn ($query) => $query->where('event', $event))
             ->latest('created_at')
             ->paginate(15)

@@ -40,17 +40,22 @@ Reusable domain-neutral Laravel 12 boilerplate built on Inertia, Vue, Fortify, S
   - activity log
   - audit detail page
   - global search
-  - media library with upload/download/delete
+  - media library with upload/download/delete and automatic image thumbnails (requires the PHP GD extension; gracefully skipped otherwise)
   - shared settings registry and admin settings UI
   - dashboard shell with generic metrics
-  - CSV export and print center
-  - generic import-run tracking (`import_runs`)
+  - export center: CSV, XLSX, XML, print view, and PDF summary
+  - generic CSV import engine (`App\Support\Import\CsvImportEngine`) with preview/validation and `import_runs` history
+- Localization:
+  - per-user locale preference on the profile screen
+  - `lang/<code>/messages.php` structure exposed to the frontend via a shared `translations` prop and the `useT()` composable
+  - add a language by creating the lang folder and registering it in `App\Support\Locales`
 - API baseline:
   - `/api/v1/auth/*`
   - `/api/v1/notifications`
   - `/api/v1/activity-logs`
   - `/api/v1/admin/users`
   - `/api/v1/admin/summary`
+  - `/api/v1/media`
 
 ## Local Setup
 
@@ -143,6 +148,39 @@ Main flow:
 3. Call protected endpoints with `Authorization: Bearer <token>`
 
 An importable Postman collection is included at [master-starter-api.postman_collection.json](./master-starter-api.postman_collection.json).
+
+## Import Engine
+
+The reusable CSV import engine validates first, persists second:
+
+```php
+use App\Support\Import\CsvImportEngine;
+use App\Support\Import\ImportRowError;
+
+$engine = new CsvImportEngine;
+
+$preview = $engine->preview(
+    $request->file('file')->get(),
+    'users',
+    function (array $row, int $rowNumber): ?ImportRowError {
+        if (($row['email'] ?? '') === '') {
+            return new ImportRowError('Email is required.');
+        }
+
+        return null;
+    },
+    expectedHeader: ['name', 'email'],
+);
+
+if ($preview->isCommittable()) {
+    $run = $engine->commit($preview, auth()->user(), function (array $row): void {
+        // persist one validated row
+    });
+}
+```
+
+Every commit is recorded in `import_runs` with row counts, per-row errors,
+and a preview snapshot. UI wiring is intentionally left to each project.
 
 ## Operations Notes
 

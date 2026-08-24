@@ -20,13 +20,7 @@ class AdminUserController extends Controller
 
         $users = User::query()
             ->with('roles')
-            ->when($search !== '', function ($query) use ($search): void {
-                $query->where(function ($userQuery) use ($search): void {
-                    $userQuery
-                        ->where('name', 'ilike', "%{$search}%")
-                        ->orWhere('email', 'ilike', "%{$search}%");
-                });
-            })
+            ->when($search !== '', fn ($query) => $query->searchLike(['name', 'email'], $search))
             ->orderBy('name')
             ->paginate(10)
             ->withQueryString();

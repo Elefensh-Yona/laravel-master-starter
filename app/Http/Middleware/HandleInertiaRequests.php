@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\Locales;
 use App\Support\SettingStore;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
@@ -80,6 +81,9 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn (): ?string => $request->session()->get('success'),
                 'error' => fn (): ?string => $request->session()->get('error'),
             ],
+            'locale' => app()->getLocale(),
+            'availableLocales' => Locales::all(),
+            'translations' => __('messages'),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

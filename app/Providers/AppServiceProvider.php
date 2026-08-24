@@ -14,6 +14,8 @@ use App\Support\SystemRole;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -38,6 +40,33 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureQueryBuilderMacros();
+    }
+
+    /**
+     * Register reusable query builder macros.
+     */
+    protected function configureQueryBuilderMacros(): void
+    {
+        EloquentBuilder::macro('searchLike', function (array $columns, string $term): EloquentBuilder {
+            $pattern = '%'.str($term)->trim().'%';
+
+            return $this->where(function (EloquentBuilder $query) use ($columns, $pattern): void {
+                foreach ($columns as $column) {
+                    $query->orWhereRaw("lower({$column}) like lower(?)", [$pattern]);
+                }
+            });
+        });
+
+        QueryBuilder::macro('searchLike', function (array $columns, string $term): QueryBuilder {
+            $pattern = '%'.str($term)->trim().'%';
+
+            return $this->where(function (QueryBuilder $query) use ($columns, $pattern): void {
+                foreach ($columns as $column) {
+                    $query->orWhereRaw("lower({$column}) like lower(?)", [$pattern]);
+                }
+            });
+        });
     }
 
     /**

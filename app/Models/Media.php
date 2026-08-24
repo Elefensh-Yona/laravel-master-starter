@@ -24,6 +24,7 @@ class Media extends Model
         'disk',
         'directory',
         'path',
+        'thumbnail_path',
         'original_name',
         'stored_name',
         'extension',

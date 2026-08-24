@@ -24,6 +24,7 @@ class MediaResource extends JsonResource
             'size' => $this->size,
             'path' => $this->path,
             'disk' => $this->disk,
+            'has_thumbnail' => $this->thumbnail_path !== null,
             'uploaded_by' => $this->uploaded_by,
             'attachable_type' => $this->attachable_type,
             'attachable_id' => $this->attachable_id,

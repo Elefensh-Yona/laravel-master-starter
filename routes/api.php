@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AdminSummaryController;
 use App\Http\Controllers\Api\V1\AdminUserController;
 use App\Http\Controllers\Api\V1\AuthTokenController;
 use App\Http\Controllers\Api\V1\CurrentUserController;
+use App\Http\Controllers\Api\V1\MediaApiController;
 use App\Http\Controllers\Api\V1\NotificationApiController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,5 +36,7 @@ Route::prefix('v1')->group(function (): void {
             ->middleware('permission:users.view');
         Route::get('admin/users', AdminUserController::class)
             ->middleware('permission:users.view');
+        Route::get('media', [MediaApiController::class, 'index'])
+            ->middleware('permission:media.view');
     });
 });

@@ -40,9 +40,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware(['permission:exports.view', 'permission:users.view'])
         ->name('exports.users.csv');
 
+    Route::get('exports/users.xlsx', [ExportCenterController::class, 'usersXlsx'])
+        ->middleware(['permission:exports.view', 'permission:users.view'])
+        ->name('exports.users.xlsx');
+
+    Route::get('exports/users.xml', [ExportCenterController::class, 'usersXml'])
+        ->middleware(['permission:exports.view', 'permission:users.view'])
+        ->name('exports.users.xml');
+
     Route::get('exports/summary/print', [ExportCenterController::class, 'printSummary'])
         ->middleware('permission:exports.view')
         ->name('exports.summary.print');
+
+    Route::get('exports/summary.pdf', [ExportCenterController::class, 'summaryPdf'])
+        ->middleware('permission:exports.view')
+        ->name('exports.summary.pdf');
 
     Route::get('admin/users', [UserManagementController::class, 'index'])
         ->middleware('permission:users.view')

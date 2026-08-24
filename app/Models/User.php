@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Locales;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'locale',
     ];
 
     /**
@@ -51,5 +53,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Resolve the effective locale for the user.
+     */
+    public function effectiveLocale(): string
+    {
+        return Locales::isSupported($this->locale)
+            ? $this->locale
+            : Locales::defaultCode();
     }
 }

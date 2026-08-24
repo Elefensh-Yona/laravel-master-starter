@@ -31,13 +31,7 @@ class RoleManagementController extends Controller
             'roles' => Role::query()
                 ->withCount('users')
                 ->withCount('permissions')
-                ->when($search !== '', function ($query) use ($search): void {
-                    $query->where(function ($roleQuery) use ($search): void {
-                        $roleQuery
-                            ->where('name', 'ilike', "%{$search}%")
-                            ->orWhere('description', 'ilike', "%{$search}%");
-                    });
-                })
+                ->when($search !== '', fn ($query) => $query->searchLike(['name', 'description'], $search))
                 ->orderBy('name')
                 ->paginate(10)
                 ->withQueryString()

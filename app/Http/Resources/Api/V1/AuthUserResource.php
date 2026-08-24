@@ -21,6 +21,7 @@ class AuthUserResource extends JsonResource
             'email_verified_at' => $this->resource->email_verified_at?->toISOString(),
             'roles' => $this->resource->getRoleNames()->values()->all(),
             'permissions' => $this->resource->getAllPermissions()->pluck('name')->values()->all(),
+            'locale' => $this->resource->effectiveLocale(),
         ];
     }
 }
