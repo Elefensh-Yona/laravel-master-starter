@@ -27,7 +27,7 @@ class ScreeningFactory extends Factory
             'application_id' => Application::factory(),
             'application_version_id' => ApplicationVersion::factory(),
             'validation_id' => ApplicationValidation::factory(),
-            'status' => 'in_review',
+            'status' => 'completed',
             'outcome' => 'ELIGIBLE',
             'screened_by' => User::factory(),
             'completed_at' => now(),
@@ -36,5 +36,15 @@ class ScreeningFactory extends Factory
             'reopened_by' => null,
             'reopen_reason' => null,
         ];
+    }
+
+    public function inReview(): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'status' => 'in_review',
+            'outcome' => null,
+            'completed_at' => null,
+            'rationale' => null,
+        ]);
     }
 }

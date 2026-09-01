@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Application;
+use App\Models\ApplicationVersion;
 use App\Models\Program;
 use App\Models\ProgramEligibilityRule;
 use App\Models\ProgramMembership;
@@ -72,6 +74,7 @@ class ManualQaFixtureSeeder extends Seeder
             'program.create',
             'program.update',
             'program.publish',
+            'application.view',
             'eligibility.view',
             'eligibility.validate',
             'eligibility.screen',
@@ -192,7 +195,103 @@ class ManualQaFixtureSeeder extends Seeder
             ],
         );
 
+        $draftApplication = Application::query()->firstOrCreate(
+            [
+                'program_id' => $programA->id,
+                'reference' => 'QA-APPLICATION-A-DRAFT',
+            ],
+            [
+                'primary_owner_id' => $applicant->id,
+                'applicant_type' => 'INDIVIDUAL',
+                'status' => 'draft',
+                'metadata' => ['source' => 'manual-qa-fixture', 'scenario' => 'draft-application'],
+            ],
+        );
+
+        $this->seedApplicationVersion(
+            application: $draftApplication,
+            owner: $applicant,
+            status: 'draft',
+            submittedAt: null,
+            content: ['summary' => 'QA Application A - Draft'],
+        );
+
+        $submittedAt = CarbonImmutable::create(2026, 8, 15, 12, 0, 0, 'UTC');
+        $submittedApplication = Application::query()->firstOrCreate(
+            [
+                'program_id' => $programA->id,
+                'reference' => 'QA-APPLICATION-B-SUBMITTED',
+            ],
+            [
+                'primary_owner_id' => $applicant->id,
+                'applicant_type' => 'INDIVIDUAL',
+                'status' => 'submitted',
+                'submitted_at' => $submittedAt,
+                'metadata' => ['source' => 'manual-qa-fixture', 'scenario' => 'submitted-application'],
+            ],
+        );
+
+        $this->seedApplicationVersion(
+            application: $submittedApplication,
+            owner: $applicant,
+            status: 'submitted',
+            submittedAt: $submittedAt,
+            content: ['summary' => 'QA Application B - Submitted'],
+        );
+
+        $programBApplication = Application::query()->firstOrCreate(
+            [
+                'program_id' => $programB->id,
+                'reference' => 'QA-APPLICATION-C-PROGRAM-B-SCOPE',
+            ],
+            [
+                'primary_owner_id' => $applicant->id,
+                'applicant_type' => 'INDIVIDUAL',
+                'status' => 'submitted',
+                'submitted_at' => $submittedAt,
+                'metadata' => ['source' => 'manual-qa-fixture', 'scenario' => 'program-b-scope'],
+            ],
+        );
+
+        $this->seedApplicationVersion(
+            application: $programBApplication,
+            owner: $applicant,
+            status: 'submitted',
+            submittedAt: $submittedAt,
+            content: ['summary' => 'QA Application C - Program B Scope'],
+        );
+
         $this->command->info('Manual QA fixture created for Super Admin, Program Staff, Decision Maker, Judge, and Applicant.');
         $this->command->info('QA password: DevelopmentQa123! (development/testing only)');
+    }
+
+    /**
+     * @param  array<string, string>  $content
+     */
+    private function seedApplicationVersion(
+        Application $application,
+        User $owner,
+        string $status,
+        ?CarbonImmutable $submittedAt,
+        array $content,
+    ): void {
+        $version = ApplicationVersion::query()->firstOrCreate(
+            [
+                'application_id' => $application->id,
+                'version_number' => 1,
+            ],
+            [
+                'status' => $status,
+                'content' => $content,
+                'created_by' => $owner->id,
+                'submitted_at' => $submittedAt,
+                'submitted_by' => $submittedAt === null ? null : $owner->id,
+                'metadata' => ['source' => 'manual-qa-fixture'],
+            ],
+        );
+
+        if ($application->current_version_id === null) {
+            $application->update(['current_version_id' => $version->id]);
+        }
     }
 }

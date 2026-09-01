@@ -232,7 +232,7 @@ class ScreeningController extends Controller
     }
 
     /**
-     * @return array{id: int, programId: int, applicationId: int, applicationVersionId: int, status: string, outcome: string|null, rationale: string|null, screenedBy: int, completedAt: string|null, reopenedAt: string|null, reopenedBy: int|null}
+     * @return array{id: int, programId: int, applicationId: int, applicationVersionId: int, validationId: int|null, status: string, outcome: string|null, rationale: string|null, screenedBy: int, completedAt: string|null, reopenedAt: string|null, reopenedBy: int|null, applicationVersion: array{id: int, versionNumber: int, status: string, submittedAt: string|null}|null, screener: array{id: int, name: string}|null, validation: array{id: int, status: string, executedAt: string}|null}
      */
     private function screeningSummary(Screening $screening): array
     {
@@ -249,6 +249,21 @@ class ScreeningController extends Controller
             'completedAt' => $screening->completed_at?->toIso8601String(),
             'reopenedAt' => $screening->reopened_at?->toIso8601String(),
             'reopenedBy' => $screening->reopened_by,
+            'applicationVersion' => $screening->relationLoaded('applicationVersion') && $screening->applicationVersion !== null ? [
+                'id' => $screening->applicationVersion->id,
+                'versionNumber' => $screening->applicationVersion->version_number,
+                'status' => $screening->applicationVersion->status,
+                'submittedAt' => $screening->applicationVersion->submitted_at?->toIso8601String(),
+            ] : null,
+            'screener' => $screening->relationLoaded('screener') && $screening->screener !== null ? [
+                'id' => $screening->screener->id,
+                'name' => $screening->screener->name,
+            ] : null,
+            'validation' => $screening->relationLoaded('validation') && $screening->validation !== null ? [
+                'id' => $screening->validation->id,
+                'status' => $screening->validation->status,
+                'executedAt' => $screening->validation->executed_at->toIso8601String(),
+            ] : null,
         ];
     }
 }

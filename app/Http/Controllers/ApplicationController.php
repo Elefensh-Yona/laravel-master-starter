@@ -9,8 +9,10 @@ use App\Models\Application;
 use App\Models\ApplicationMember;
 use App\Models\ApplicationVersion;
 use App\Models\Program;
+use App\Models\ProgramMembership;
 use App\Models\User;
 use App\Support\ActivityLogger;
+use App\Support\SystemRole;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,11 +29,20 @@ class ApplicationController extends Controller
         $actor = $request->user();
 
         $applications = Application::query()
-            ->when(
-                $actor?->can('application.view'),
-                fn (Builder $query): Builder => $query,
-                fn (Builder $query): Builder => $query->where('primary_owner_id', $actor->id),
-            )
+            ->when(! $actor->hasRole(SystemRole::SUPER_ADMIN), function (Builder $query) use ($actor): Builder {
+                return $query->where(function (Builder $visibleApplications) use ($actor): void {
+                    $visibleApplications->where('primary_owner_id', $actor->id)
+                        ->when($actor->can('application.view'), function (Builder $scopedApplications) use ($actor): void {
+                            $scopedApplications->orWhereIn(
+                                'program_id',
+                                ProgramMembership::query()
+                                    ->where('user_id', $actor->id)
+                                    ->where('status', 'active')
+                                    ->select('program_id'),
+                            );
+                        });
+                });
+            })
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(fn (Application $app): array => $this->applicationSummary($app, $actor))

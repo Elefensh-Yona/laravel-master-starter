@@ -228,7 +228,7 @@ class EligibilityValidationController extends Controller
     }
 
     /**
-     * @return array{id: int, programId: int, applicationId: int, applicationVersionId: int, status: string, result: array|null, executedAt: string, executedBy: int|null}
+     * @return array{id: int, programId: int, applicationId: int, applicationVersionId: int, status: string, result: array|null, executedAt: string, executedBy: int|null, failureReason: string|null, applicationVersion: array{id: int, versionNumber: int, status: string, submittedAt: string|null}|null, executor: array{id: int, name: string}|null}
      */
     private function validationSummary(ApplicationValidation $validation): array
     {
@@ -242,6 +242,16 @@ class EligibilityValidationController extends Controller
             'executedAt' => $validation->executed_at->toIso8601String(),
             'executedBy' => $validation->executed_by,
             'failureReason' => $validation->failure_reason,
+            'applicationVersion' => $validation->relationLoaded('applicationVersion') && $validation->applicationVersion !== null ? [
+                'id' => $validation->applicationVersion->id,
+                'versionNumber' => $validation->applicationVersion->version_number,
+                'status' => $validation->applicationVersion->status,
+                'submittedAt' => $validation->applicationVersion->submitted_at?->toIso8601String(),
+            ] : null,
+            'executor' => $validation->relationLoaded('executor') && $validation->executor !== null ? [
+                'id' => $validation->executor->id,
+                'name' => $validation->executor->name,
+            ] : null,
         ];
     }
 }
