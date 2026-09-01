@@ -2,11 +2,29 @@
 
 namespace App\Providers;
 
+use App\Models\Application;
+use App\Models\ApplicationMember;
+use App\Models\ApplicationValidation;
+use App\Models\ApplicationVersion;
 use App\Models\Media;
+use App\Models\Program;
+use App\Models\ProgramEligibilityRule;
+use App\Models\ProgramMembership;
+use App\Models\Rubric;
+use App\Models\Screening;
 use App\Models\Setting;
 use App\Models\User;
+use App\Policies\ApplicationMemberPolicy;
+use App\Policies\ApplicationPolicy;
+use App\Policies\ApplicationValidationPolicy;
+use App\Policies\ApplicationVersionPolicy;
 use App\Policies\MediaPolicy;
+use App\Policies\ProgramEligibilityRulePolicy;
+use App\Policies\ProgramMembershipPolicy;
+use App\Policies\ProgramPolicy;
 use App\Policies\RolePolicy;
+use App\Policies\RubricPolicy;
+use App\Policies\ScreeningPolicy;
 use App\Policies\SettingPolicy;
 use App\Policies\UserPolicy;
 use App\Support\ActivityLogger;
@@ -80,6 +98,15 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Media::class, MediaPolicy::class);
         Gate::policy(Setting::class, SettingPolicy::class);
         Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(Program::class, ProgramPolicy::class);
+        Gate::policy(ProgramMembership::class, ProgramMembershipPolicy::class);
+        Gate::policy(ProgramEligibilityRule::class, ProgramEligibilityRulePolicy::class);
+        Gate::policy(Rubric::class, RubricPolicy::class);
+        Gate::policy(Application::class, ApplicationPolicy::class);
+        Gate::policy(ApplicationMember::class, ApplicationMemberPolicy::class);
+        Gate::policy(ApplicationValidation::class, ApplicationValidationPolicy::class);
+        Gate::policy(ApplicationVersion::class, ApplicationVersionPolicy::class);
+        Gate::policy(Screening::class, ScreeningPolicy::class);
 
         Gate::before(fn (User $user, string $ability): ?bool => $user->hasRole(SystemRole::SUPER_ADMIN) ? true : null);
 

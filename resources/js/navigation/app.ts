@@ -1,8 +1,10 @@
 import {
     Bell,
+    BriefcaseBusiness,
     FileOutput,
     FolderOpen,
     LayoutGrid,
+    Rocket,
     Settings2,
     Shield,
     ScrollText,
@@ -10,10 +12,12 @@ import {
 } from 'lucide-vue-next';
 import { dashboard } from '@/routes';
 import { index as activityLogsIndex } from '@/routes/activity-logs';
+import { index as applicationsIndex } from '@/routes/applications';
 import { edit as adminSettingsEdit } from '@/routes/admin-settings';
 import { index as exportsIndex } from '@/routes/exports';
 import { index as mediaIndex } from '@/routes/media';
 import { index as notificationsIndex } from '@/routes/notifications';
+import { index as programsIndex } from '@/routes/programs';
 import { index as rolesIndex } from '@/routes/roles';
 import { index as usersIndex } from '@/routes/users';
 import type { NavGroup } from '@/types';
@@ -50,6 +54,18 @@ export const appNavigation: NavGroup[] = [
     {
         title: 'Management',
         items: [
+            {
+                title: 'Programs',
+                href: programsIndex(),
+                icon: Rocket,
+                ability: 'managePrograms',
+            },
+            {
+                title: 'Applications',
+                href: applicationsIndex(),
+                icon: BriefcaseBusiness,
+                permission: 'application.view',
+            },
             {
                 title: 'Export center',
                 href: exportsIndex(),

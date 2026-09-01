@@ -29,6 +29,10 @@ const mainNavigation = computed<NavGroup[]>(() =>
         .map((group) => ({
             ...group,
             items: group.items.filter((item) => {
+                if (item.ability) {
+                    return auth.value.can[item.ability];
+                }
+
                 if (!item.permission) {
                     return true;
                 }
@@ -89,8 +93,8 @@ const toggleAllGroups = (): void => {
         <SidebarHeader>
             <SidebarMenu>
                 <SidebarMenuItem>
-                    <SidebarMenuButton size="lg" as-child>
-                        <Link :href="dashboard()">
+                    <SidebarMenuButton size="lg" as-child class="min-w-0">
+                        <Link :href="dashboard()" class="min-w-0">
                             <AppLogo />
                         </Link>
                     </SidebarMenuButton>

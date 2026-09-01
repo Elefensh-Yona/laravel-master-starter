@@ -5,10 +5,15 @@ use App\Http\Controllers\Admin\MediaManagementController;
 use App\Http\Controllers\Admin\RoleManagementController;
 use App\Http\Controllers\Admin\SettingsManagementController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\ApplicationMemberController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EligibilityValidationController;
 use App\Http\Controllers\ExportCenterController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ScreeningController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,6 +33,80 @@ Route::middleware(['auth', 'verified', 'permission:dashboard.view'])->group(func
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('programs', [ProgramController::class, 'index'])->name('programs.index');
+    Route::get('programs/create', [ProgramController::class, 'create'])
+        ->middleware('permission:program.create')
+        ->name('programs.create');
+    Route::post('programs', [ProgramController::class, 'store'])
+        ->middleware('permission:program.create')
+        ->name('programs.store');
+    Route::get('programs/{program}/edit', [ProgramController::class, 'edit'])
+        ->middleware('permission:program.update')
+        ->name('programs.edit');
+    Route::put('programs/{program}', [ProgramController::class, 'update'])
+        ->middleware('permission:program.update')
+        ->name('programs.update');
+    Route::post('programs/{program}/publish', [ProgramController::class, 'publish'])
+        ->middleware('permission:program.publish')
+        ->name('programs.publish');
+    Route::get('programs/{program}', [ProgramController::class, 'show'])->name('programs.show');
+
+    Route::get('applications', [ApplicationController::class, 'index'])->name('applications.index');
+    Route::get('applications/create', [ApplicationController::class, 'create'])
+        ->middleware('permission:application.create')
+        ->name('applications.create');
+    Route::post('applications', [ApplicationController::class, 'store'])
+        ->middleware('permission:application.create')
+        ->name('applications.store');
+    Route::get('applications/{application}', [ApplicationController::class, 'show'])->name('applications.show');
+    Route::get('applications/{application}/edit', [ApplicationController::class, 'edit'])
+        ->middleware('permission:application.update')
+        ->name('applications.edit');
+    Route::put('applications/{application}', [ApplicationController::class, 'update'])
+        ->middleware('permission:application.update')
+        ->name('applications.update');
+    Route::get('applications/{application}/members', [ApplicationMemberController::class, 'index'])
+        ->middleware('permission:application.view')
+        ->name('applications.members.index');
+    Route::post('applications/{application}/members', [ApplicationMemberController::class, 'store'])
+        ->middleware('permission:application.update')
+        ->name('applications.members.store');
+    Route::put('applications/{application}/members/{member}', [ApplicationMemberController::class, 'update'])
+        ->middleware('permission:application.update')
+        ->name('applications.members.update');
+    Route::delete('applications/{application}/members/{member}', [ApplicationMemberController::class, 'destroy'])
+        ->middleware('permission:application.update')
+        ->name('applications.members.destroy');
+    Route::post('applications/{application}/submit', [ApplicationController::class, 'submit'])
+        ->middleware('permission:application.submit')
+        ->name('applications.submit');
+    Route::post('applications/{application}/revise', [ApplicationController::class, 'revise'])
+        ->middleware('permission:application.update')
+        ->name('applications.revise');
+
+    Route::get('applications/{application}/eligibility-validations', [EligibilityValidationController::class, 'index'])
+        ->middleware('permission:application.view')
+        ->name('eligibility-validations.index');
+    Route::get('applications/{application}/eligibility-validations/{validation}', [EligibilityValidationController::class, 'show'])
+        ->middleware('permission:application.view')
+        ->name('eligibility-validations.show');
+    Route::post('applications/{application}/eligibility-validations', [EligibilityValidationController::class, 'store'])
+        ->middleware('permission:eligibility.validate')
+        ->name('eligibility-validations.store');
+
+    Route::get('applications/{application}/screenings', [ScreeningController::class, 'index'])
+        ->middleware('permission:application.view')
+        ->name('screenings.index');
+    Route::get('applications/{application}/screenings/{screening}', [ScreeningController::class, 'show'])
+        ->middleware('permission:application.view')
+        ->name('screenings.show');
+    Route::post('applications/{application}/screenings', [ScreeningController::class, 'store'])
+        ->middleware('permission:eligibility.screen')
+        ->name('screenings.store');
+    Route::put('applications/{application}/screenings/{screening}', [ScreeningController::class, 'update'])
+        ->middleware('permission:eligibility.screen')
+        ->name('screenings.update');
+
     Route::get('search', GlobalSearchController::class)
         ->middleware('permission:search.view')
         ->name('search.index');

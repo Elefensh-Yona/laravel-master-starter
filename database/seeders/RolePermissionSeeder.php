@@ -93,6 +93,20 @@ class RolePermissionSeeder extends Seeder
             'roles.delete',
             'notifications.view',
             'activity-logs.view',
+            'program.view',
+            'program.create',
+            'program.update',
+            'program.publish',
+            'application.view',
+            'application.create',
+            'application.update',
+            'application.submit',
+            'eligibility.view',
+            'eligibility.validate',
+            'eligibility.screen',
+            'rubric.view',
+            'rubric.create',
+            'rubric.update',
         ];
 
         foreach ($permissions as $permission) {

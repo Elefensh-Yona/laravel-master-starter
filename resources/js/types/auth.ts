@@ -23,6 +23,7 @@ export type Auth = {
         manageSettings: boolean;
         manageUsers: boolean;
         manageRoles: boolean;
+        managePrograms: boolean;
         viewNotifications: boolean;
         viewActivityLogs: boolean;
     };

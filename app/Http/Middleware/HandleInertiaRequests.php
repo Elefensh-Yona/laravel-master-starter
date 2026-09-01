@@ -56,6 +56,8 @@ class HandleInertiaRequests extends Middleware
                     'manageSettings' => $user?->can('settings.view') ?? false,
                     'manageUsers' => $user?->can('users.view') ?? false,
                     'manageRoles' => $user?->can('roles.view') ?? false,
+                    'managePrograms' => ($user?->can('program.view') ?? false)
+                        || ($user?->can('program.create') ?? false),
                     'viewNotifications' => $user?->can('notifications.view') ?? false,
                     'viewActivityLogs' => $user?->can('activity-logs.view') ?? false,
                 ],

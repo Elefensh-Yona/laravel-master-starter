@@ -13,7 +13,7 @@ const appName = computed(() => page.props.name ?? 'Laravel Master Starter');
     >
         <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
     </div>
-    <div class="ml-2 grid flex-1 text-left text-sm">
+    <div class="ml-2 grid min-w-0 flex-1 text-left text-sm">
         <span
             class="truncate text-[0.7rem] font-medium tracking-[0.18em] text-muted-foreground uppercase"
         >

@@ -1,5 +1,6 @@
 import type { InertiaLinkProps } from '@inertiajs/vue3';
 import type { LucideIcon } from 'lucide-vue-next';
+import type { Auth } from './auth';
 
 export type BreadcrumbItem = {
     title: string;
@@ -12,6 +13,7 @@ export type NavItem = {
     icon?: LucideIcon;
     isActive?: boolean;
     permission?: string;
+    ability?: keyof Auth['can'];
 };
 
 export type NavGroup = {

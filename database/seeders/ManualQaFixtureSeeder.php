@@ -1,0 +1,198 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Program;
+use App\Models\ProgramEligibilityRule;
+use App\Models\ProgramMembership;
+use App\Models\Rubric;
+use App\Models\User;
+use App\Support\SystemRole;
+use Carbon\CarbonImmutable;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+
+class ManualQaFixtureSeeder extends Seeder
+{
+    /**
+     * Local development-only QA fixture for Manual QA Checkpoint #1.
+     */
+    public function run(): void
+    {
+        $qaPassword = 'DevelopmentQa123!';
+
+        $superAdmin = User::query()->firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ],
+        );
+        $superAdmin->syncRoles([SystemRole::SUPER_ADMIN]);
+
+        $programStaff = User::query()->firstOrCreate(
+            ['email' => 'qa-program-staff@example.com'],
+            [
+                'name' => 'QA Program Staff',
+                'password' => Hash::make($qaPassword),
+                'email_verified_at' => now(),
+            ],
+        );
+
+        $decisionMaker = User::query()->firstOrCreate(
+            ['email' => 'qa-decision-maker@example.com'],
+            [
+                'name' => 'QA Decision Maker',
+                'password' => Hash::make($qaPassword),
+                'email_verified_at' => now(),
+            ],
+        );
+
+        $judge = User::query()->firstOrCreate(
+            ['email' => 'qa-judge@example.com'],
+            [
+                'name' => 'QA Judge',
+                'password' => Hash::make($qaPassword),
+                'email_verified_at' => now(),
+            ],
+        );
+
+        $applicant = User::query()->firstOrCreate(
+            ['email' => 'qa-applicant@example.com'],
+            [
+                'name' => 'QA Applicant',
+                'password' => Hash::make($qaPassword),
+                'email_verified_at' => now(),
+            ],
+        );
+
+        $programStaff->givePermissionTo([
+            'program.view',
+            'program.create',
+            'program.update',
+            'program.publish',
+            'eligibility.view',
+            'eligibility.validate',
+            'eligibility.screen',
+            'rubric.view',
+            'rubric.create',
+            'rubric.update',
+        ]);
+
+        $decisionMaker->syncRoles([]);
+        $judge->syncRoles([]);
+        $applicant->syncRoles([]);
+
+        $programAOpensAt = CarbonImmutable::now()->addWeeks(2);
+        $programAClosesAt = $programAOpensAt->clone()->addMonth();
+
+        $programA = Program::query()->firstOrCreate(
+            ['code' => 'EAIC-2026-01'],
+            [
+                'name' => 'EAIC Innovation Challenge 2026',
+                'slug' => 'eaic-innovation-challenge-2026',
+                'status' => 'draft',
+                'timezone' => 'Africa/Addis_Ababa',
+                'opens_at' => $programAOpensAt,
+                'closes_at' => $programAClosesAt,
+                'created_by' => $superAdmin->id,
+                'description' => 'A development QA program to exercise Program administration, publication, and program-scoped actions.',
+                'metadata' => ['source' => 'manual-qa-fixture'],
+            ],
+        );
+
+        $programBOpensAt = CarbonImmutable::now()->addMonth();
+        $programBClosesAt = $programBOpensAt->clone()->addMonth();
+
+        $programB = Program::query()->firstOrCreate(
+            ['code' => 'EAIC-2026-02'],
+            [
+                'name' => 'EAIC Regional Challenge 2026',
+                'slug' => 'eaic-regional-challenge-2026',
+                'status' => 'draft',
+                'timezone' => 'Africa/Addis_Ababa',
+                'opens_at' => $programBOpensAt,
+                'closes_at' => $programBClosesAt,
+                'created_by' => $superAdmin->id,
+                'description' => 'A second QA program used to test cross-program separation and out-of-scope visibility.',
+                'metadata' => ['source' => 'manual-qa-fixture'],
+            ],
+        );
+
+        ProgramMembership::query()->firstOrCreate(
+            [
+                'program_id' => $programA->id,
+                'user_id' => $programStaff->id,
+                'capability' => 'program_staff',
+            ],
+            [
+                'status' => 'active',
+                'starts_at' => now()->subDay(),
+                'granted_by' => $superAdmin->id,
+                'metadata' => ['source' => 'manual-qa-fixture'],
+            ],
+        );
+
+        ProgramEligibilityRule::query()->firstOrCreate(
+            [
+                'program_id' => $programA->id,
+                'key' => 'age_18_plus',
+            ],
+            [
+                'label' => 'Age 18 or older',
+                'rule_type' => 'boolean',
+                'configuration' => ['expected' => true],
+                'position' => 1,
+                'is_required' => true,
+                'is_enabled' => true,
+                'description' => 'Development QA rule for program screening.',
+            ],
+        );
+
+        ProgramEligibilityRule::query()->firstOrCreate(
+            [
+                'program_id' => $programB->id,
+                'key' => 'team_size_confirmation',
+            ],
+            [
+                'label' => 'Team size confirmation',
+                'rule_type' => 'boolean',
+                'configuration' => ['expected' => true],
+                'position' => 1,
+                'is_required' => true,
+                'is_enabled' => true,
+                'description' => 'Second QA rule to test a separate program setup.',
+            ],
+        );
+
+        Rubric::query()->firstOrCreate(
+            [
+                'program_id' => $programA->id,
+                'name' => 'EAIC 2026 Innovation Rubric',
+            ],
+            [
+                'status' => 'draft',
+                'created_by' => $superAdmin->id,
+                'description' => 'Development QA rubric for the Program A workflow.',
+                'metadata' => ['source' => 'manual-qa-fixture'],
+            ],
+        );
+
+        Rubric::query()->firstOrCreate(
+            [
+                'program_id' => $programB->id,
+                'name' => 'EAIC 2026 Regional Rubric',
+            ],
+            [
+                'status' => 'draft',
+                'created_by' => $superAdmin->id,
+                'description' => 'Development QA rubric for the Program B workflow.',
+                'metadata' => ['source' => 'manual-qa-fixture'],
+            ],
+        );
+
+        $this->command->info('Manual QA fixture created for Super Admin, Program Staff, Decision Maker, Judge, and Applicant.');
+        $this->command->info('QA password: DevelopmentQa123! (development/testing only)');
+    }
+}
